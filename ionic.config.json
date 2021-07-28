@@ -1,0 +1,7 @@
+{
+  "name": "castr-OTT",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}

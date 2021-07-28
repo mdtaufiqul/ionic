@@ -1,0 +1,101 @@
+.header-md::after{
+    content: none;
+}
+
+.item-inner{
+    border: 0px;
+}
+
+.text-s-s {
+    font-size: var(--font-s-s);
+}
+
+.text-s-m {
+    font-size: var(--font-s-m);
+}
+
+.text-s-xxl {
+    font-size: var(--font-s-xxl);
+}
+
+.text-s-xl {
+    font-size: var(--font-s-xl);
+}
+
+.text-s-xs {
+    font-size: var(--font-s-xs);
+}
+
+.fw-500{
+    font-weight: 500;
+}
+.fw-400{
+    font-weight: 400;
+}
+.fw-600{
+    font-weight: 600;
+}
+.fw-700{
+    font-weight: 700;
+}
+
+.base-padding{
+    padding: 0px 20px;
+}
+.color-light{
+    color: var(--ion-color-light);
+}
+.color-text-1{
+    color: var(--ion-color-text-1);
+}
+.color-text-2{
+    color: var(--ion-color-text-2);
+}
+
+
+.ion-color-text-5{
+    background: var( --ion-color-text-5);
+}
+  .text-uppercase{
+    text-transform: uppercase;
+  }
+  .text-lowercase{
+    text-transform: lowercase;
+  }
+  .text-capitalize{
+    text-transform: capitalize;
+  }
+
+  .text-underline{
+      text-decoration: underline;
+  }
+  ion-content{
+    --padding-start: 20px;
+    --padding-end: 20px;
+}
+#thumb-container video, #thumb-container img {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+iframe{
+    height: 100vh;
+ width: 100%;
+}
+.folder-single {
+    padding: 15px 0px;
+    border-bottom: 1px solid var(--ion-color-secondary);
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+}
+
+.folder-single.pt-0{
+    padding-top: 0px;
+}
+
+.folder-single img {
+    margin-right: 10px;
+}
