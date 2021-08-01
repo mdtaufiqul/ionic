@@ -1,6 +1,10 @@
 <template>
-  <ion-page>
-    <ion-content class="ion-no-padding">
+  <base-layout
+    :show-header="false"
+    :show-footer="false"
+    :show-padding="false"
+  >
+    <template #content>
       <div
         v-show="!processing"
         class="iframe-wrapper"
@@ -13,8 +17,8 @@
       >
         <ion-spinner name="crescent" />
       </div>
-    </ion-content>
-  </ion-page>
+    </template>
+  </base-layout>
 </template>
 
 <script>
@@ -70,7 +74,7 @@ export default({
  }
  .loader {
     width: 100%;
-    height: 100px;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;

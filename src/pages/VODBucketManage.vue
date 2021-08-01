@@ -1,91 +1,99 @@
 <template>
-  <ion-page>
-    <ion-content class="ion-no-padding">
-      <div
-        v-show="!processing"
-        class="vod-single-wrapper"
-      >
-        <div class="iframe-wrapper">
-          <iframe
-            :src="eUrl"
-            class="embed"
-            frameborder="0"
-            width="500"
-            height="380"
-            allow="autoplay"
-            scrolling="no"
-            allowfullscreen
-            webkitallowfullscreen
-            mozallowfullscreen
-            oallowfullscreen
-            msallowfullscreen
-          />
-        </div>
-        <ion-item class="ion-no-border">
-          <div class="video-info">
-            <ion-text
-              color="light"
-              class="video-title"
-            >
-              {{ title }} 
-            </ion-text>
-            <div class="profile-info">
-              <ion-thumbnail slot="end">
-                <img
-                  src="@/assets/images/profile_image.png"
-                  alt="ABC Church"
+  <base-layout
+    :show-header="false"
+    :show-footer="false"
+    :show-padding="false"
+  >
+    <template #content>
+      <ion-page>
+        <ion-content class="ion-no-padding">
+          <div
+            v-show="!processing"
+            class="vod-single-wrapper"
+          >
+            <div class="iframe-wrapper">
+              <iframe
+                :src="eUrl"
+                class="embed"
+                frameborder="0"
+                width="500"
+                height="380"
+                allow="autoplay"
+                scrolling="no"
+                allowfullscreen
+                webkitallowfullscreen
+                mozallowfullscreen
+                oallowfullscreen
+                msallowfullscreen
+              />
+            </div>
+            <ion-item class="ion-no-border">
+              <div class="video-info">
+                <ion-text
+                  color="light"
+                  class="video-title"
                 >
-              </ion-thumbnail>
-              <ion-text color="medium">
-                <h3 class="ion-no-margin text-s-s">
-                  ABC Church
-                </h3>
-              </ion-text>
+                  {{ title }} 
+                </ion-text>
+                <div class="profile-info">
+                  <ion-thumbnail slot="end">
+                    <img
+                      src="@/assets/images/profile_image.png"
+                      alt="ABC Church"
+                    >
+                  </ion-thumbnail>
+                  <ion-text color="medium">
+                    <h3 class="ion-no-margin text-s-s">
+                      ABC Church
+                    </h3>
+                  </ion-text>
+                </div>
+              </div>
+            </ion-item>
+            <ion-item>
+              <div class="folder-info">
+                <img
+                  src="@/assets/images/folder.png"
+                  alt="Folder"
+                >
+                <ion-text
+                  color="light"
+                  class="video-folder-name"
+                >
+                  {{ folder }}
+                </ion-text>
+              </div>
+            </ion-item>
+            <div
+              v-if="!processing"
+              class="vod-content"
+            >
+              <ion-item
+                class="ion-no-border ion-no-padding no-scrollbar related-list"
+              >
+                <ion-grid class="ion-no-padding">
+                  <ion-row>
+                    <vod-single
+                      v-for="stream in otherStreams"
+                      :key="stream.id"
+                      :voditem="stream"
+                      @refresh="refresh"
+                    />
+                  </ion-row>
+                </ion-grid>
+              </ion-item>
             </div>
           </div>
-        </ion-item>
-        <ion-item>
-          <div class="folder-info">
-            <img
-              src="@/assets/images/folder.png"
-              alt="Folder"
-            >
-            <ion-text
-              color="light"
-              class="video-folder-name"
-            >
-              {{ folder }}
-            </ion-text>
-          </div>
-        </ion-item>
-        <div
-          v-if="!processing"
-          class="vod-content"
-        >
-          <ion-item
-            class="ion-no-border ion-no-padding no-scrollbar related-list"
+          <div
+            v-show="processing"
+            class="loader"
           >
-            <ion-grid class="ion-no-padding">
-              <ion-row>
-                <vod-single
-                  v-for="stream in otherStreams"
-                  :key="stream.id"
-                  :voditem="stream"
-                  @refresh="refresh"
-                />
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-        </div>
-      </div>
-      <div
-        v-show="processing"
-        class="loader"
-      >
-        <ion-spinner name="crescent" />
-      </div>
-    </ion-content>
-  </ion-page>
+            <ion-spinner name="crescent" />
+          </div>
+        </ion-content>
+      </ion-page>
+    </template>
+  </base-layout>
 </template>
 
 <script>
@@ -110,13 +118,14 @@ export default({
         }
     },
     computed: {
-    users() {
-        return this.$store.state.users;
+    streamarray() {
+        return this.$store.state.streamarray;
     }
   },
   watch: {
-    users(){  
-      if(this.$store.state.users.allvideos){
+    streamarray(){  
+      if(this.$store.state.streamarray.allvideos){
+        this.processing = true
         let video = this.findVideodetails(this.eUrl);
         this.otherStreams = this.findvideos(this.folder, this.eUrl)
         console.log(this.otherStreams);
@@ -126,7 +135,7 @@ export default({
 },
   async created() {
     try {
-        await this.$store.dispatch('loadUsers');
+        await this.$store.dispatch('loadStreams');
     } catch (e) {
         console.log(e);
     } 
@@ -155,11 +164,11 @@ export default({
       },
     findVideodetails(url) {
              console.log(url)
-        let video =  this.users.allvideos.find(function(s) { return s.embedUrl == url })
+        let video =  this.streamarray.allvideos.find(function(s) { return s.embedUrl == url })
         return video
 		},
     findvideos(folder, url){
-      let videos =  this.users.allvideos.filter(function(s) { return (s.foldername.toLowerCase() == folder.toLowerCase()) && (s.embedUrl != url) })
+      let videos =  this.streamarray.allvideos.filter(function(s) { return (s.foldername.toLowerCase() == folder.toLowerCase()) && (s.embedUrl != url) })
       return videos
     }
     }
@@ -226,7 +235,7 @@ ion-spinner {
 
 .loader {
     width: 100%;
-    height: 100px;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,116 +1,142 @@
 <template>
-  <base-layout>
-    <template #profile>
-      <ion-item class="ion-no-border">
-        <ion-text color="medium">
-          <h3 class="ion-no-margin text-s-s">
-            ABC Church
-          </h3>
-        </ion-text>
-        <ion-thumbnail slot="end">
+  <base-layout
+    :show-header="true"
+    :show-footer="true"
+    :show-padding="true"
+  >
+    <template #content="slotProps">
+      <!-- Loading Slide -->
+      <div
+        v-if="checkIsLoading"
+        slot="fixed"
+        class="initial-page"
+      >
+        <div class="castr-image">
           <img
-            src="@/assets/images/profile_image.png"
+            src="@/assets/images/demo_poster.png"
             alt="ABC Church"
           >
-        </ion-thumbnail>
-      </ion-item>
-    </template>
-    <template #content="slotProps">
-      <ion-searchbar
-        v-if="!showFolder"
-        ref="searchWidgetInputElement"
-        v-model="searchWidgetInput"
-        :placeholder="(slotProps.activeMenu == 'live') ? 'Searching for Stream...' : 'Searching for VOD...'"
-        color="secondary"
-        class="ion-no-padding"
-        @ionFocus="onSearchWidgetFocus"
-        @ionBlur="onSearchWidgetBlur"
-      />
-      <div
-        v-else
-        class="navigation"
-      >
-        <ion-buttons
-          slot="start"
-          class="back-button"
-          @click="showFolder = false"
-        >
-          <img
-            src="@/assets/images/left-arrow.svg"
-            alt="Back"
-          >
-        </ion-buttons>
-        <ion-text>Folder</ion-text>
+        </div>
+        <div class="castr-spinner">
+          <ion-spinner
+            name="circles"
+            color="primary"
+          />
+        </div>
       </div>
-      <ion-segment
-        v-show="slotProps.activeMenu == 'live'"
-        :value="activeTab"
-        @ionChange="segmentChanged($event)"
-      >
-        <ion-segment-button
-          value="livestream"
-          class="ion-no-margin"
+      <!-- Loading Slide Ends -->
+      <div v-else>
+        <ion-searchbar
+          v-if="!showFolder"
+          ref="searchWidgetInputElement"
+          v-model="searchWidgetInput"
+          :placeholder="(slotProps.activeMenu == 'live') ? 'Searching for Stream...' : 'Searching for VOD...'"
+          color="secondary"
+          class="ion-no-padding"
+          @ionFocus="onSearchWidgetFocus"
+          @ionBlur="onSearchWidgetBlur"
+        />
+        <div
+          v-else
+          class="navigation"
         >
-          <ion-label class="color-text-1 fw-500 text-s-s text-capitalize">
-            Livestream
-          </ion-label>
-        </ion-segment-button>
-        <ion-segment-button
-          value="offline"
-          class="ion-no-margin"
-        >
-          <ion-label class="color-text-1 fw-500 text-s-s text-capitalize">
-            Offline
-          </ion-label>
-        </ion-segment-button>
-      </ion-segment>
-      <div v-show="(slotProps.activeMenu == 'vod') && !showFolder">
-        <ion-item
-          class="vod-nav"
-        >
-          <ion-select
-            :interface-options="customActionSheetOptions"
-            interface="action-sheet"
-            placeholder="Sort by Newest"
-            class="text-s-m fw-400"
-            name="sort"
-            value="newest"
-            @ionChange="sortVod"
+          <ion-buttons
+            slot="start"
+            class="back-button"
+            @click="showFolder = false"
           >
-            <ion-select-option value="newest">
-              Sort by Newest
-            </ion-select-option>
-            <ion-select-option value="oldest">
-              Sort by Oldest
-            </ion-select-option>
-            <ion-select-option value="atoz">
-              A to Z
-            </ion-select-option>
-            <ion-select-option value="ztoa">
-              Z to A
-            </ion-select-option>
-          </ion-select>
-        
-          <ion-grid class="ion-no-padding folder">
-            <ion-row
-              class="folder-menu ion-justify-content-center ion-align-items-center ion-no-margin"
-              @click="folderView"
+            <img
+              src="@/assets/images/left-arrow.svg"
+              alt="Back"
             >
-              <img
-                src="@/assets/images/folder.png"
-                alt="Folder"
+          </ion-buttons>
+          <ion-text>Folder</ion-text>
+        </div>
+        <ion-segment
+          v-show="slotProps.activeMenu == 'live'"
+          :value="activeTab"
+          @ionChange="segmentChanged($event)"
+        >
+          <ion-segment-button
+            value="livestream"
+            class="ion-no-margin"
+          >
+            <ion-label class="color-text-1 fw-500 text-s-s text-capitalize">
+              Livestream
+            </ion-label>
+          </ion-segment-button>
+          <ion-segment-button
+            value="offline"
+            class="ion-no-margin"
+          >
+            <ion-label class="color-text-1 fw-500 text-s-s text-capitalize">
+              Offline
+            </ion-label>
+          </ion-segment-button>
+        </ion-segment>
+        <div v-show="(slotProps.activeMenu == 'vod') && !showFolder">
+          <ion-item
+            class="vod-nav"
+          >
+            <ion-select
+              :interface-options="customActionSheetOptions"
+              interface="action-sheet"
+              placeholder="Sort by Newest"
+              class="text-s-m fw-400"
+              name="sort"
+              value="newest"
+              @ionChange="sortVod"
+            >
+              <ion-select-option value="newest">
+                Sort by Newest
+              </ion-select-option>
+              <ion-select-option value="oldest">
+                Sort by Oldest
+              </ion-select-option>
+              <ion-select-option value="atoz">
+                A to Z
+              </ion-select-option>
+              <ion-select-option value="ztoa">
+                Z to A
+              </ion-select-option>
+            </ion-select>
+        
+            <ion-grid class="ion-no-padding folder">
+              <ion-row
+                class="folder-menu ion-justify-content-center ion-align-items-center ion-no-margin"
+                @click="folderView"
               >
-              <ion-label
-                color="light"
-                class="text-s-m fw-400"
-              >
-                Folder
-              </ion-label>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
+                <img
+                  src="@/assets/images/folder.png"
+                  alt="Folder"
+                >
+                <ion-label
+                  color="light"
+                  class="text-s-m fw-400"
+                >
+                  Folder
+                </ion-label>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+   
+          <ion-item
+            class="ion-no-border ion-no-padding no-scrollbar"
+          >
+            <ion-grid class="ion-no-padding">
+              <ion-row>
+                <vod-single
+                  v-for="stream in getVOD()"
+                  :key="stream.id"
+                  :voditem="stream"
+                />
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </div>
         <ion-item
           v-if="showFolder"
+          @click="showFolder=!showFolder"
         >
           <ion-text class="ion-justify-content-start ion-align-items-center color-text-2 text-s-m text-capitalize folder-single pt-0">
             <img
@@ -120,41 +146,26 @@
             ><span>All file</span>
           </ion-text>
         </ion-item>
+
         <ion-item
-          v-else
+          v-show="(slotProps.activeMenu == 'live') || ((slotProps.activeMenu == 'vod') && showFolder)"
           class="ion-no-border ion-no-padding no-scrollbar"
         >
           <ion-grid class="ion-no-padding">
             <ion-row>
-              <vod-single
-                v-for="stream in getVOD()"
-                :key="stream.id"
-                :voditem="stream"
+              <single-stream
+                v-for="stream in filterStream(slotProps.activeMenu)"
+                :key="stream._id"
+                :stream="stream"
+                :stream-status="activeTab"
+                :stream-category="slotProps.activeMenu"
+                :show-folder="showFolder"
+                @folder-clicked="findFolderstream"
               />
             </ion-row>
           </ion-grid>
         </ion-item>
       </div>
- 
-
-      <ion-item
-        v-show="(slotProps.activeMenu == 'live') || ((slotProps.activeMenu == 'vod') && showFolder)"
-        class="ion-no-border ion-no-padding no-scrollbar"
-      >
-        <ion-grid class="ion-no-padding">
-          <ion-row>
-            <single-stream
-              v-for="stream in filterStream(slotProps.activeMenu)"
-              :key="stream._id"
-              :stream="stream"
-              :stream-status="activeTab"
-              :stream-category="slotProps.activeMenu"
-              :show-folder="showFolder"
-              @folder-clicked="findFolderstream"
-            />
-          </ion-row>
-        </ion-grid>
-      </ion-item>
     </template>
   </base-layout>
 </template>
@@ -165,7 +176,7 @@ import {
   IonThumbnail, IonLabel,
   IonText,IonSegment, IonSegmentButton, IonGrid, IonRow, IonSelect,
   IonSelectOption, 
-  IonSearchbar,IonButtons,IonBackButton 
+  IonSearchbar,IonButtons,IonBackButton, IonSpinner
 } from '@ionic/vue';
 import singleStream from '../components/stream/singleStream';
 import vodSingle from '@/components/stream/vodSingle.vue';
@@ -177,7 +188,7 @@ export default({
   components: {  
     singleStream,IonSelect,IonButtons,
   IonSearchbar,
-  IonSelectOption,
+  IonSelectOption,IonSpinner,
     // vodStream,
     IonItem, 
   IonThumbnail, IonLabel,
@@ -201,15 +212,18 @@ export default({
     }
   },
   computed: {
-    users() {
+    streamarray() {
       console.log("done1");
-        return this.$store.state.users;
+        return this.$store.state.streamarray;
+    },
+    checkIsLoading() {
+        return this.$store.state.isLoading;
     }
   },
 watch: {
-  users(){
+  streamarray(){
     console.log("done2");
-    if(this.$store.state.users.allvideos){
+    if(this.$store.state.streamarray.allvideos){
        this.changeSortBy('newest');
     }
   }
@@ -219,7 +233,7 @@ watch: {
   },
     async created() {
     try {
-        await this.$store.dispatch('loadUsers');
+        await this.$store.dispatch('loadStreams');
     } catch (e) {
         console.log(e);
     } 
@@ -267,27 +281,27 @@ watch: {
      },
     changeSortBy(val) {
       
-			this.rawStreams = _.isEmpty(this.rawStreams) ? this.users.allvideos : this.rawStreams;
+			this.rawStreams = _.isEmpty(this.rawStreams) ? this.streamarray.allvideos : this.rawStreams;
       let streamsSorted = null;
 			if(val === 'atoz') {
-				const lowerCaseStreams = this.users.allvideos.map((item) => ({...item, lowerCaseName : _.lowerCase(item.fileName)}));
+				const lowerCaseStreams = this.streamarray.allvideos.map((item) => ({...item, lowerCaseName : _.lowerCase(item.fileName)}));
 				streamsSorted = _.orderBy(lowerCaseStreams, ['lowerCaseName'],['asc']);
 				this.rawStreams = streamsSorted
 			}
 			if(val === 'ztoa') {
-				const lowerCaseStreams = this.users.allvideos.map((item) => ({...item, lowerCaseName : _.lowerCase(item.fileName)}));
+				const lowerCaseStreams = this.streamarray.allvideos.map((item) => ({...item, lowerCaseName : _.lowerCase(item.fileName)}));
 				const streamsSorted = _.orderBy(lowerCaseStreams, ['lowerCaseName'],['desc']);
 				this.rawStreams = streamsSorted
 			}
 			if(val === 'newest') {
-				const streamsSorted = _.orderBy(this.users.allvideos, ['creationTime'],['desc']);
+				const streamsSorted = _.orderBy(this.streamarray.allvideos, ['creationTime'],['desc']);
 				this.rawStreams = streamsSorted
 			}
 			if(val === 'oldest') {
-				const streamsSorted = _.orderBy(this.users.allvideos, ['creationTime'],['asc']);
+				const streamsSorted = _.orderBy(this.streamarray.allvideos, ['creationTime'],['asc']);
 				this.rawStreams = streamsSorted
 			}
-      this.users.allvideos == this.rawStreams
+      this.streamarray.allvideos == this.rawStreams
 		},
     sortVod(e){
       let sortvalue = e.detail.value;
@@ -299,8 +313,8 @@ watch: {
       this.activeTab = activetab
     },
      filterStream(cat, foldername = null) {
-        if (this.users && typeof this.users === 'object') {
-            const filteredStream = this.users.streams.filter(single => {
+        if (this.streamarray && typeof this.streamarray === 'object') {
+            const filteredStream = this.streamarray.streams.filter(single => {
                    let bool =  single.type == cat
                    if(bool && this.searchWidgetInput){
                   const searchStr = this.searchWidgetInput.toLowerCase();
@@ -326,6 +340,24 @@ watch: {
 </script>
 
 <style>
+.initial-page{
+    background: var(--ion-color-light);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+}
+.castr-spinner{
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
 ion-thumbnail{
   width: 24px;
   height: 24px;
@@ -382,7 +414,7 @@ ion-row.folder-menu{
   background: var(--ion-color-text-4);
   box-shadow: 0px 12px 16px rgba(0, 0, 0, 0.06), 0px 2px 2px rgba(0, 0, 0, 0.04), 0px 1px 1px rgba(0, 0, 0, 0.12), inset 0px 0.5px 0px rgba(255, 255, 255, 0.08);
 border-radius: 6px;
-padding: 8.5px 23px;
+padding: 7.5px 23px;
 position: relative;
     z-index: 9;
     cursor: pointer;
@@ -394,8 +426,8 @@ ion-select{
   background: var(--ion-color-text-4);
   --placeholder-color: var(--ion-color-light);
   --placeholder-opacity: 1;
-  --padding-top: 8.5px;
-  --padding-bottom: 8.5px;
+  --padding-top: 9px;
+  --padding-bottom: 9px;
   --padding-end: 15px;
   --padding-start: 40px;
   width: 100%;
@@ -454,6 +486,9 @@ height: 40px;}
 </style>
 
 <style scoped>
+ion-grid{
+  max-width: 100%;
+}
 ion-searchbar{
     --border-radius: 6px;
     --placeholder-font-weight: 400;

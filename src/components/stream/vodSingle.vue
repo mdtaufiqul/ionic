@@ -22,7 +22,7 @@
           alt="ABC Church"
           class="fw-500 text-s-xl "
         >
-        {{ (voditem.foldername.length > 20) ? voditem.foldername.substring(0,20)+".." : voditem.foldername }}
+        {{ (voditem.foldername.length > 15) ? voditem.foldername.substring(0,15)+".." : voditem.foldername }}
       </ion-text>
     </ion-card-content>
   </ion-card>

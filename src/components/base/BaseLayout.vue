@@ -2,14 +2,13 @@
   <ion-page>
     <ion-content>
       <div
-        v-if="!checkIsLoading"
         class="content-inner"
       >
         <ion-tabs
-          class="base-padding"
+          :class=" showPadding ? 'base-padding' : 'ion-no-padding' "
           @ionTabsWillChange="beforeTabChange"
         >
-          <ion-header>
+          <ion-header v-if="showHeader">
             <ion-toolbar>
               <ion-buttons
                 slot="start"
@@ -19,18 +18,36 @@
                   {{ (activeMenu == 'live') ? 'Stream' : 'VOD' }}
                 </ion-title>
               </ion-buttons>
-              <ion-item slot="end">
-                <slot name="profile" />
+              <ion-item
+                slot="end"
+                class="ion-no-border"
+              >
+                <ion-text color="medium">
+                  <h3 class="ion-no-margin text-s-s">
+                    ABC Church
+                  </h3>
+                </ion-text>
+                <ion-thumbnail slot="end">
+                  <img
+                    src="@/assets/images/profile_image.png"
+                    alt="ABC Church"
+                  >
+                </ion-thumbnail>
               </ion-item>
             </ion-toolbar>
           </ion-header>
           <div class="main-content">
+            <!-- ====main-content slot==== -->
             <slot
               name="content"
               :activeMenu="activeMenu"
             />
           </div>
-          <ion-tab-bar slot="bottom">
+          <!-- Footer Slide Start -->
+          <ion-tab-bar
+            v-if="showFooter"
+            slot="bottom"
+          >
             <ion-tab-button
               tab="live"
               href="/stream/live"
@@ -62,10 +79,12 @@
               </ion-label>
             </ion-tab-button>
           </ion-tab-bar>
+          <!-- Footer Slide Ends -->
         </ion-tabs>
       </div>
-      <div
-        v-else
+      <!-- Loading Slide -->
+      <!-- <div
+        v-if="checkIsLoading"
         slot="fixed"
         class="initial-page"
       >
@@ -81,7 +100,8 @@
             color="primary"
           />
         </div>
-      </div>
+      </div> -->
+      <!-- Loading Slide Ends -->
     </ion-content>
   </ion-page>
 </template>
@@ -99,7 +119,9 @@ import {
   IonToolbar,
   IonTitle,
   IonButtons,
-  IonSpinner
+  IonSpinner,
+  IonText,
+  IonThumbnail
 } from "@ionic/vue";
 
 
@@ -115,18 +137,20 @@ export default {
   IonTabBar, 
   IonTabButton, 
   IonTabs,
-  IonSpinner
+  IonSpinner,
+  IonText,
+  IonThumbnail
   },
-  props: ["pageTitle"],
+  props: [ "pageTitle", "showHeader", "showFooter", "showPadding" ],
   data() {
       return {
           activeMenu: 'live',
       }
   },
   computed: {
-    checkIsLoading() {
-        return this.$store.state.isLoading;
-    }
+    // checkIsLoading() {
+    //     return this.$store.state.isLoading;
+    // }
   },
   async mounted() {
   
@@ -153,7 +177,7 @@ ion-toolbar {
     margin: 0 auto;
 }
 ion-header{
-    margin-top: 16px;
+    margin-top: 13px;
 }
 ion-title{
     line-height: 1;
@@ -185,21 +209,6 @@ ion-tab-button.tab-selected img{
 
 .main-content::-webkit-scrollbar {
     display: none;
-}
-
-.initial-page{
-    background: var(--ion-color-light);
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-.castr-spinner{
-    position: fixed;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
 }
 
 ion-title{

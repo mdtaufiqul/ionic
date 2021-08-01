@@ -1,28 +1,8 @@
-// import { createStore } from 'vuex';
-// import userServices from '@/services/services';
-
-// const store = createStore({
-//     state() {
-//         return {
-//             apikey : 'castrkey_a72434d0-deef-11eb-bf1a-751aff539a7c'
-//         };
-//     },
-//     getters: {
-//         getApi(state){
-//             return state.apikey;
-//         },
-//         async getStreams(){
-//             return await userServices.getStreams('/streams?apiKey=castrkey_470c2d30-defb-11eb-90fa-f582e5f1edf5')
-//         }
-//     }
-// });
-
-// export default store;
 import Vuex from 'vuex';
 import userServices from '@/services/services';
 import _ from 'lodash';
   const state= {
-    users: [],
+    streamarray: [],
     isLoading: false,
   };
 
@@ -30,8 +10,8 @@ import _ from 'lodash';
     IS_LOADING(state, isLoading) {
 		state.isLoading = isLoading;
 	},
-    SAVE_USERS(state, users) {
-      state.users = users;
+    SAVE_STREAMS(state, streams) {
+      state.streamarray = streams;
     }
   };
 
@@ -39,7 +19,7 @@ import _ from 'lodash';
     setIsLoading({ commit }, isLoading) {
 		commit('IS_LOADING', isLoading);
 	},
-   async loadUsers({commit, dispatch}) {
+   async loadStreams({commit, dispatch}) {
     try {
         dispatch('setIsLoading', true);
         await userServices.getStreams().then(result => {
@@ -63,12 +43,12 @@ import _ from 'lodash';
 
           Promise.all(pulseAdded)
           .then(results => {
-            commit('SAVE_USERS', {streams: result});
+            commit('SAVE_STREAMS', {streams: result});
             dispatch('setIsLoading', false);
             console.log('user loaded');
             Promise.all(videoLists)
             .then(results => {
-              commit('SAVE_USERS', {
+              commit('SAVE_STREAMS', {
                 streams: result,
                 allvideos: _.flatten(videos)
               });
