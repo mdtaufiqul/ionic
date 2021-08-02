@@ -10,9 +10,9 @@ import _ from 'lodash';
     IS_LOADING(state, isLoading) {
 		state.isLoading = isLoading;
 	},
-    SAVE_STREAMS(state, streams) {
-      state.streamarray = streams;
-    }
+  SAVE_STREAMS(state, streams) {
+    state.streamarray = streams;
+  }
   };
 
   const actions= {
@@ -28,32 +28,12 @@ import _ from 'lodash';
             await userServices.findMediapulse(stream)
           }
           })
-        
-          // let vodAdded = result.map(async function(stream){
-          //   stream.type == 'vod' && await userServices.getStreamPlaylist(stream)
-          // })
-          let videos = [];
-          let videoLists = result.map(async function(stream){
-            if( stream.type == 'vod' ) {
-              let list = await userServices.getStreamVideolist(stream)
-              videos.push(list);
-            }
-          })
-          // videos = _.flatten(videos);
-
           Promise.all(pulseAdded)
           .then(results => {
             commit('SAVE_STREAMS', {streams: result});
             dispatch('setIsLoading', false);
             console.log('user loaded');
-            Promise.all(videoLists)
-            .then(results => {
-              commit('SAVE_STREAMS', {
-                streams: result,
-                allvideos: _.flatten(videos)
-              });
-              console.log('vod loaded');
-            })
+            dispatch('loadVOD');
           })
           .catch(e => {
             console.error(e);
@@ -62,6 +42,34 @@ import _ from 'lodash';
       
         
         }); 
+    }
+    catch(e){
+        console.log(e);
+    }
+      },
+   async loadVOD({commit, dispatch}) {
+    try {
+          let videos = [];
+          let videoLists = state.streamarray.streams.map(async function(stream){
+            if( stream.type == 'vod' ) {
+              let list = await userServices.getStreamVideolist(stream)
+              videos.push(list);
+            }
+          })
+          // videos = _.flatten(videos);
+
+          Promise.all(videoLists)
+          .then(results => {
+            commit('SAVE_STREAMS', {
+              streams: state.streamarray.streams,
+              allvideos: _.flatten(videos)
+            });
+            console.log('vod loaded');
+          })
+          .catch(e => {
+            console.error(e);
+          })
+
     }
     catch(e){
         console.log(e);

@@ -233,7 +233,7 @@ watch: {
   },
     async created() {
     try {
-        await this.$store.dispatch('loadStreams');
+        await this.$store.dispatch('loadStreams')
     } catch (e) {
         console.log(e);
     } 
@@ -314,6 +314,8 @@ watch: {
     },
      filterStream(cat, foldername = null) {
         if (this.streamarray && typeof this.streamarray === 'object') {
+          console.log('here');
+          console.log(this.streamarray.streams);
             const filteredStream = this.streamarray.streams.filter(single => {
                    let bool =  single.type == cat
                    if(bool && this.searchWidgetInput){
