@@ -152,7 +152,7 @@
           class="ion-no-border ion-no-padding no-scrollbar"
         >
           <ion-grid class="ion-no-padding">
-            <ion-row>
+            <ion-row v-if="(activeTab == 'livestream' ? countedStream.live : countedStream.offline) > 0">
               <single-stream
                 v-for="stream in filterStream(slotProps.activeMenu)"
                 :key="stream._id"
@@ -161,7 +161,28 @@
                 :stream-category="slotProps.activeMenu"
                 :show-folder="showFolder"
                 @folder-clicked="findFolderstream"
+                @is-live="countStream(slotProps.activeMenu)"
               />
+            </ion-row>
+            <ion-row v-else>
+              <ion-text class="no-stream">
+                <img
+                  src="@/assets/images/no-stream.svg"
+                  alt="Back"
+                >
+                <h2 class="ion-no-margin color-text-2 text-xs-custom text-500">
+                  There is no stream here
+                </h2>
+                <p
+                  v-if="activeTab == 'livestream'"
+                  class="color-text-6 text-s-m"
+                >
+                  Maybe the stream you’re looking for is not live yet. Visit <span @click="activeTab = 'offline'">Offline page</span> for a check.
+                </p>
+                <p class="color-text-6 text-s-m" v-else>
+                  Maybe come back later.
+                </p>
+              </ion-text>
             </ion-row>
           </ion-grid>
         </ion-item>
@@ -208,6 +229,10 @@ export default({
       customActionSheetOptions: {
       // header: 'Colors',
       // subHeader: 'Select your favorite color'
+    },
+    countedStream: {
+      live: 0,
+      offline: 0
     }
     }
   },
@@ -223,6 +248,7 @@ export default({
 watch: {
   streamarray(){
     console.log("done2");
+    this.countStream('live')
     if(this.$store.state.streamarray.allvideos){
        this.changeSortBy('newest');
     }
@@ -309,7 +335,7 @@ watch: {
     },
     segmentChanged(ev) {
       let activetab = ev.detail.value;
-      // console.log(activetab);
+      console.log(activetab);
       this.activeTab = activetab
     },
      filterStream(cat, foldername = null) {
@@ -332,6 +358,19 @@ watch: {
       findFolderstream(value){
         this.showFolder = false
         this.searchFolder = value
+      },
+      countStream(value){
+          // this.countedStream.live++ 
+          // this.countedStream.offline = (this.filterStream(value).length - this.countedStream.live)
+          // console.log(this.countedStream);
+          let sreamList = this.filterStream(value)
+          let countlive = sreamList.filter(function(single){
+            return single.enabled && single.mediapulse.alive
+          });
+          this.countedStream.live = countlive.length
+          this.countedStream.offline = (sreamList.length - countlive.length)
+          console.log('sreamList');
+          console.log(this.countedStream);
       },
       folderView() {
         this.searchFolder = ''
@@ -423,6 +462,7 @@ position: relative;
    width: 122px;
    margin-right: 0;
    margin-left: auto;
+   height: 36px;
 }
 ion-select{
   background: var(--ion-color-text-4);
@@ -437,6 +477,7 @@ ion-select{
   border-radius: 6px;
   color: var(--ion-color-light);
   position: relative;
+  height: 36px;
 }
 ion-select:after{
   content: "";
@@ -530,5 +571,21 @@ ion-buttons.back-button {
     width: 100%;
     text-align: center;
     margin-left: -20px;
+}
+.no-stream{
+  text-align: center;
+  margin-top: 65px;
+}
+.no-stream img{
+  display: inline-block;
+  margin-bottom: 24px;
+}
+.no-stream p{
+margin-top: 7px;
+}
+.no-stream p>span{
+ color: var(--ion-color-text-1);
+ text-decoration: underline;
+ cursor: pointer;
 }
 </style>

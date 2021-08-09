@@ -25,6 +25,12 @@
 .text-s-xs {
     font-size: var(--font-s-xs);
 }
+.text-s-custom {
+    font-size: var(--font-s-custom);
+}
+.text-xs-custom {
+    font-size: var(--font-xs-custom);
+}
 
 .fw-500{
     font-weight: 500;
@@ -50,6 +56,9 @@
 }
 .color-text-2{
     color: var(--ion-color-text-2);
+}
+.color-text-6{
+    color: var(--ion-color-text-6);
 }
 
 

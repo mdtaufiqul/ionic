@@ -71,6 +71,8 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-text-3: #4F5C87;
   --ion-color-text-4: #343E61;
   --ion-color-text-5: rgba(255, 255, 255, 0.24);
+  --ion-color-text-6: #8794B5;
+  --ion-color-text-7: #0062FF;
 
   --ion-font-family: "Fira Sans", -apple-system, BlinkMacSystemFont,  sans-serif;
 
@@ -80,6 +82,8 @@ http://ionicframework.com/docs/theming/ */
 	--font-s-m: 15px;
 	--font-s-s: 14px;
 	--font-s-xs: 13px;
+  --font-s-custom: 22px;
+  --font-xs-custom: 17px;
   
 }
 

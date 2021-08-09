@@ -4,6 +4,7 @@ import _ from 'lodash';
   const state= {
     streamarray: [],
     isLoading: false,
+    connected: navigator.onLine
   };
 
   const mutations= {
@@ -12,10 +13,17 @@ import _ from 'lodash';
 	},
   SAVE_STREAMS(state, streams) {
     state.streamarray = streams;
+  },
+  SET_CONNECTED(state, payload) {
+    state.connected = payload
   }
   };
 
   const actions= {
+    setConnected ({ commit }, payload) {
+      console.log('dispatching');
+      commit('SET_CONNECTED', payload)
+    },
     setIsLoading({ commit }, isLoading) {
 		commit('IS_LOADING', isLoading);
 	},
@@ -78,7 +86,7 @@ import _ from 'lodash';
     }
 
   const getters = {
-      
+    isConnected: state => state.connected
 };
 
   export default new Vuex.Store({

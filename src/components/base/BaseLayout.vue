@@ -2,6 +2,7 @@
   <ion-page>
     <ion-content>
       <div
+        v-if="connected"
         class="content-inner"
       >
         <ion-tabs
@@ -82,6 +83,31 @@
           <!-- Footer Slide Ends -->
         </ion-tabs>
       </div>
+      <div
+        v-else
+        class="no-internet"
+      >
+        <ion-thumbnail slot="end">
+          <img
+            src="@/assets/images/nointernet.png"
+            alt="No Internet"
+          >
+        </ion-thumbnail>
+        <ion-text>
+          <h2 class="color-text-2 text-s-custom">
+            WHOOPS!
+          </h2>
+          <p class="color-text-6 text-s-m">
+            You are not connected to the internet. Please check your connection or try again.
+          </p>
+          <ion-buttons
+            class="no-internet-btn"
+            href="/"
+          >
+            Try Again
+          </ion-buttons>
+        </ion-text>
+      </div>
       <!-- Loading Slide -->
       <!-- <div
         v-if="checkIsLoading"
@@ -107,6 +133,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import {
   IonItem,
   IonContent,  
@@ -148,12 +175,23 @@ export default {
       }
   },
   computed: {
-    // checkIsLoading() {
-    //     return this.$store.state.isLoading;
-    // }
+    ...mapGetters({
+      connected: 'isConnected'
+    })
+    //  connected() {
+    //     return this.$store.getters['connected']
+    //   }
+  },
+    created() {
+    window.addEventListener('offline', () => {
+      this.$store.dispatch('setConnected', false)
+    })
+    window.addEventListener('online', () => {
+      this.$store.dispatch('setConnected', true)
+    })
   },
   async mounted() {
-  
+    console.log(this.connected);
 	},
   methods: {
     beforeTabChange(e){
@@ -162,6 +200,7 @@ export default {
  
   }
 };
+
 </script>
 
 <style scoped>
@@ -217,5 +256,34 @@ ion-title{
 .header-ios ion-toolbar:last-of-type {
     --border-width: 0px;
     border: 0px !important;
+}
+.no-internet{
+  text-align: center;
+      height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.no-internet h2{
+  margin-bottom: 7px;
+  margin-top: 20px;
+}
+.no-internet ion-thumbnail{
+  width: 205px;
+  height: 136px;
+}
+.no-internet-btn{
+  color: #fff;
+  background: var(--ion-color-text-7);
+  font-weight: 500;
+  font-size: 17px;
+  padding: 12px 0px;
+  width: 103px;
+  margin: 0 auto;
+  text-align: center;
+  box-shadow: 0px 12px 16px rgba(0, 0, 0, 0.06), 0px 2px 2px rgba(0, 0, 0, 0.04), 0px 1px 1px rgba(0, 0, 0, 0.12), inset 0px 0.5px 0px rgba(255, 255, 255, 0.16);
+border-radius: 6px;
+display: block;
 }
 </style>

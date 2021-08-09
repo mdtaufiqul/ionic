@@ -92,15 +92,11 @@ export default defineComponent({
   },
   computed:{
     streamAlive() {
-          return this.streamStat && this.mediaPulse && this.mediaPulse.alive;
+          let checkAlive = this.streamStat && this.mediaPulse && this.mediaPulse.alive;
+          return checkAlive;
         },
   },
   mounted() {
-  // if (this.stream.type !== 'vod') {
-  //   	setTimeout(() => {
-	// 			this.subscribeMediaPulse();
-	// 		}, 1500);
-	// 	}
   this.subscribeMediaPulse();
   },
   unmounted() {
@@ -154,7 +150,7 @@ export default defineComponent({
 		},
     onMediaPulse(pulse = {}) {
 			this.mediaPulse = pulse;
-			this.$emit('pulse-update', this.stream.id, pulse);
+			// this.$emit('pulse-update', this.stream.id, pulse);
 		},
     unsubscribeMediaPulse() {
 			clearTimeout(this.mediaPulseTimeoutCtrl);
