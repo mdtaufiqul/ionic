@@ -120,6 +120,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import userServices from '@/services/services';
+import { Plugins } from '@capacitor/core';
+const { App } = Plugins;
+
 import {
   IonItem,
   IonContent,  
@@ -134,13 +137,15 @@ import {
   IonButtons,
   IonSpinner,
   IonText,
-  IonThumbnail
+  IonThumbnail,
+  useIonRouter 
 } from "@ionic/vue";
 
 
 export default {
   components: {
     userServices,
+    useIonRouter ,
   IonContent,IonItem,
   IonPage,
   IonHeader,  
@@ -155,15 +160,16 @@ export default {
   IonText,
   IonThumbnail
   },
-  props: [ "pageTitle", "showHeader", "showFooter", "showPadding" ],
-
+  props: [ "pageTitle", "showHeader", "showFooter", "showPadding" ], 
   data() {
       return {
           activeMenu: 'live',
           ottPoster: null,
-          profileName: null
+          profileName: null,
+          exitapp: true
       }
   },
+
   computed: {
     ...mapGetters({
       connected: 'isConnected'
@@ -181,9 +187,38 @@ export default {
     })
   },
   async mounted() {
+    this.setHistory()
+    console.log('inmount'+this.setHistory());
     // console.log(this.connected);
+      let currentPath = this.$route.matched[0].path
+       const ionRouter = useIonRouter();
+      //  console.log(currentPath);
+        
+      document.addEventListener('ionBackButton', (ev) => {
+        this.setHistory()
+        ev.detail.register(10, () => {
+        
+
+          if((this.exitapp)){
+            console.log('exit');
+            App.exitApp();
+            navigator['app'].exitApp();
+          }else{
+          if(currentPath == '/vodstreams/:streamId/:sname/:fname'){
+              this.$router.replace({ path: '/stream/vod' })
+           }
+
+          if(currentPath == '/livestreams/:streamId'){
+              this.$router.replace({ path: '/stream/live' })
+           }
+          }
+          
+        
+
+        });
+      });
     	try {
-       await userServices.getUserdata().then(result => {
+       this.connected && await userServices.getUserdata().then(result => {
          this.profileName = result.name
          this.ottPoster = 'https://assets.castr.io/ottAppPosters/'+result.ottAppPoster
        });
@@ -194,6 +229,19 @@ export default {
   methods: {
     beforeTabChange(e){
       this.activeMenu = e.tab
+    },
+    setHistory(){
+      let currentRoute = this.$route.name 
+      if(currentRoute == 'LivestreamManage'){
+        this.exitapp = false
+      }
+      if(currentRoute == 'VODBucketManage'){
+        this.exitapp = false
+      }
+      if(currentRoute == 'Stream'){
+        this.exitapp = true
+      }
+      return this.exitapp
     }
  
   }

@@ -99,22 +99,14 @@
 </template>
 
 <script>
-import {  IonPage, IonContent, IonItem, IonText, IonThumbnail,IonGrid, IonRow, IonSpinner, useBackButton } from '@ionic/vue';
+import {  IonPage, IonContent, IonItem, IonText, IonThumbnail,IonGrid, IonRow, IonSpinner } from '@ionic/vue';
 import vodSingle from '@/components/stream/vodSingle.vue';
 
 export default({
       components: {
-        IonContent,useBackButton,
+        IonContent,
         IonPage, IonItem, IonText, IonThumbnail, IonGrid, IonRow, vodSingle, IonSpinner 
         },
-    setup() {
-       
-    },
-       setup() {
-    useBackButton(10, () => {
-      this.$router.push({ path: '/stream/vod' })
-    });
-  },
     data() {
         return {
             eUrl: null,
@@ -150,11 +142,11 @@ export default({
 },
     mounted() {
       this.processing = true
-      console.log(this.$route);
       let url = this.$route && this.$route.params.streamId
       this.eUrl = url
       this.title = this.$route && this.$route.params.sname
       this.folder = this.$route && this.$route.params.fname
+   
     },
     methods: {
       checkIframeloading(){

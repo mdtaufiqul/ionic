@@ -223,6 +223,9 @@ import {
 } from '@ionic/vue';
 import singleStream from '../components/stream/singleStream';
 import vodSingle from '@/components/stream/vodSingle.vue';
+import { BackButtonEvent } from '@ionic/core';
+import { Plugins } from '@capacitor/core';
+const { App } = Plugins;
 // import vodStream from '../components/stream/vodStream';
 // import userServices from '@/services/services';
 import _ from 'lodash';
@@ -235,7 +238,7 @@ export default({
     // vodStream,
     IonItem, 
   IonThumbnail, IonLabel,
-  IonText ,IonSegment, IonSegmentButton, IonGrid, IonRow, vodSingle,IonBackButton },
+  IonText ,IonSegment, IonSegmentButton, IonGrid, IonRow, vodSingle,IonBackButton, BackButtonEvent, Plugins, App },
   data () {
     return {
       activeTab: 'livestream',
@@ -277,7 +280,6 @@ watch: {
   }
 },
   async mounted() {
-   
   },
     async created() {
     try {
