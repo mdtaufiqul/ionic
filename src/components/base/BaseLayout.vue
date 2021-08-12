@@ -166,27 +166,38 @@ export default {
           activeMenu: 'live',
           ottPoster: null,
           profileName: null,
-          exitapp: true
+          exitapp: true,
+          connected: navigator.onLine
       }
   },
-
-  computed: {
-    ...mapGetters({
-      connected: 'isConnected'
-    })
-    //  connected() {
-    //     return this.$store.getters['connected']
-    //   }
-  },
-    created() {
-    window.addEventListener('offline', () => {
-      this.$store.dispatch('setConnected', false)
-    })
-    window.addEventListener('online', () => {
-      this.$store.dispatch('setConnected', true)
-    })
-  },
+	watch: {
+		async connected () {
+			// overwrite url if load balancer enabled
+		   if(this.connected){
+         console.log('once once once');
+             try {
+                  await this.$store.dispatch('loadStreams')
+              } catch (e) {
+                  console.log(e);
+              } 
+          }
+		}
+	},
   async mounted() {
+      setInterval(async () => {
+       Promise.resolve(await userServices.checkOnlineStatus()).then(async (result)=>{
+          console.log('isOnline: '+result);
+          this.connected = result
+          // if(result){
+          //    try {
+          //         await this.$store.dispatch('loadStreams')
+          //     } catch (e) {
+          //         console.log(e);
+          //     } 
+          // }
+  })
+    }, 3000);
+
     this.setHistory()
     console.log('inmount'+this.setHistory());
     // console.log(this.connected);
@@ -218,7 +229,7 @@ export default {
         });
       });
     	try {
-       this.connected && await userServices.getUserdata().then(result => {
+       await userServices.getUserdata().then(result => {
          this.profileName = result.name
          this.ottPoster = 'https://assets.castr.io/ottAppPosters/'+result.ottAppPoster
        });

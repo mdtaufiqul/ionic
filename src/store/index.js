@@ -4,7 +4,6 @@ import _ from 'lodash';
   const state= {
     streamarray: [],
     isLoading: false,
-    connected: navigator.onLine
   };
 
   const mutations= {
@@ -13,24 +12,18 @@ import _ from 'lodash';
 	},
   SAVE_STREAMS(state, streams) {
     state.streamarray = streams;
-  },
-  SET_CONNECTED(state, payload) {
-    state.connected = payload
   }
   };
 
   const actions= {
-    setConnected ({ commit }, payload) {
-      console.log('dispatching');
-      commit('SET_CONNECTED', payload)
-    },
     setIsLoading({ commit }, isLoading) {
 		commit('IS_LOADING', isLoading);
 	},
    async loadStreams({commit, dispatch}) {
     try {
         dispatch('setIsLoading', true);
-        await userServices.getStreams().then( result => {
+        await userServices.getStreams().then(result => {
+          
           let pulseAdded = result.map(async function(stream){
             
               if(stream && stream.type == 'live' && stream.enabled){
@@ -52,8 +45,12 @@ import _ from 'lodash';
 
         }); 
     }
-    catch(e){
-        console.log(e);
+    catch(error){
+      if (!error.response) {
+        checkInternet()
+    } else {
+      console.log(error.response.data.message)
+    }
     }
       },
    async loadVOD({commit, dispatch}) {
@@ -75,25 +72,40 @@ import _ from 'lodash';
             });
             console.log('vod loaded');
           })
-          .catch(e => {
-            console.error(e);
-          })
+          .catch(error => {
+            if (!error.response) {
+              checkInternet()
+          } else {
+            console.log(error.response.data.message)
+          }
+          }
+          )
 
     }
-    catch(e){
-        console.log(e);
+    catch(error){
+      if (!error.response) {
+        checkInternet()
+      } else {
+        console.log(error.response.data.message)
+        
+      }
     }
       }
     }
 
-  const getters = {
-    isConnected: state => state.connected
-};
 
-  export default new Vuex.Store({
-    namespaced: true,
-    state,
-    mutations,
-    actions,
-    getters
-  });
+
+async function checkInternet(){
+  Promise.resolve(await userServices.checkOnlineStatus()).then((result)=>{
+  console.log('isOnline: '+result);
+    return result
+  })
+}
+
+export default new Vuex.Store({
+  namespaced: true,
+  state,
+  mutations,
+  actions
+});
+

@@ -15,7 +15,11 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use((request) => {
 	return request;
 }, (error) => {
-	console.log('err', error)
+	if (!error.response) {
+        console.log('Error: Network Error')
+    } else {
+      console.log(error.response.data.message)
+    }
 	throw error;
 });
 

@@ -10,8 +10,22 @@ export default {
 	getStreamPlaylist,
 	getStreamVideolist,
 	getUserdata,
-	getStreammetadata
+	getStreammetadata,
+	checkOnlineStatus
 }
+
+async function checkOnlineStatus() {
+	try {
+	  const online = await fetch("https://developers.castr.io/apiv1");
+	  return online.status >= 200 && online.status < 300; 
+	} catch (err) {
+		setTimeout(() => {
+			store.dispatch('setIsLoading', false)
+		}, 4000);
+	  return false; // definitely offline
+	}
+  }
+
 
 async function getStreams() {
     let  streamLists =  await makeRequest('/streams/mystreams');
