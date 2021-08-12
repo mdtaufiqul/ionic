@@ -35,7 +35,7 @@
         <ion-text class="d-flex ion-justify-content-start ion-align-items-center color-text-2 text-s-m text-capitalize folder-single">
           <img
             src="@/assets/images/folder-filled.svg"
-            alt="ABC Church"
+            alt="Folder"
             class="fw-500 text-s-xl "
           ><span>{{ stream.name }}</span>
         </ion-text>

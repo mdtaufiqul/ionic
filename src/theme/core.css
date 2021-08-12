@@ -81,6 +81,7 @@
   ion-content{
     --padding-start: 20px;
     --padding-end: 20px;
+    --overflow: hidden;
 }
 #thumb-container video, #thumb-container img {
     width: 100%;

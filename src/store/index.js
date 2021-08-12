@@ -30,11 +30,13 @@ import _ from 'lodash';
    async loadStreams({commit, dispatch}) {
     try {
         dispatch('setIsLoading', true);
-        await userServices.getStreams().then(result => {
-        let pulseAdded = result.map(async function(stream){
-          if(stream.type == 'live' && stream.enabled){
-            await userServices.findMediapulse(stream)
-          }
+        await userServices.getStreams().then( result => {
+          let pulseAdded = result.map(async function(stream){
+            
+              if(stream && stream.type == 'live' && stream.enabled){
+                await userServices.findMediapulse(stream)
+              }
+            
           })
           Promise.all(pulseAdded)
           .then(results => {
@@ -47,8 +49,7 @@ import _ from 'lodash';
             console.error(e);
           })
 
-      
-        
+
         }); 
     }
     catch(e){

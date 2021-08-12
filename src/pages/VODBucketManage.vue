@@ -4,7 +4,7 @@
     :show-footer="false"
     :show-padding="false"
   >
-    <template #content>
+    <template #content="slotProps">
       <ion-page>
         <ion-content class="ion-no-padding">
           <div
@@ -13,8 +13,9 @@
           >
             <div class="iframe-wrapper">
               <iframe
+                v-show="!iframeProcessing"
+                id="embed"
                 :src="eUrl"
-                class="embed"
                 frameborder="0"
                 width="500"
                 height="380"
@@ -25,6 +26,7 @@
                 mozallowfullscreen
                 oallowfullscreen
                 msallowfullscreen
+                data-isloaded="0"
               />
             </div>
             <ion-item class="ion-no-border">
@@ -38,13 +40,13 @@
                 <div class="profile-info">
                   <ion-thumbnail slot="end">
                     <img
-                      src="@/assets/images/profile_image.png"
-                      alt="ABC Church"
+                      :src="slotProps.posterUrl"
+                      :alt="slotProps.profileName"
                     >
                   </ion-thumbnail>
                   <ion-text color="medium">
                     <h3 class="ion-no-margin text-s-s">
-                      ABC Church
+                      {{ slotProps.profileName }}
                     </h3>
                   </ion-text>
                 </div>
@@ -97,24 +99,30 @@
 </template>
 
 <script>
-import {  IonPage, IonContent, IonItem, IonText, IonThumbnail,IonGrid, IonRow, IonSpinner } from '@ionic/vue';
+import {  IonPage, IonContent, IonItem, IonText, IonThumbnail,IonGrid, IonRow, IonSpinner, useBackButton } from '@ionic/vue';
 import vodSingle from '@/components/stream/vodSingle.vue';
 
 export default({
       components: {
-        IonContent,
+        IonContent,useBackButton,
         IonPage, IonItem, IonText, IonThumbnail, IonGrid, IonRow, vodSingle, IonSpinner 
         },
     setup() {
        
     },
+       setup() {
+    useBackButton(10, () => {
+      this.$router.push({ path: '/stream/vod' })
+    });
+  },
     data() {
         return {
             eUrl: null,
             title: '',
             folder: '',
             otherStreams: [],
-            processing: false
+            processing: false,
+            iframeProcessing: false
         }
     },
     computed: {
@@ -149,12 +157,22 @@ export default({
       this.folder = this.$route && this.$route.params.fname
     },
     methods: {
+      checkIframeloading(){
+        let element = document.getElementById('embed');
+        // let isLoaded = element.prop('data-isloaded');
+        console.log(element);
+      },
       refresh(value){
         this.processing = true
+        this.iframeProcessing = true
         this.eUrl = value.url
+        setTimeout(() => {
+          this.iframeProcessing = false
+        },2500 );
+        
         this.title = value.name
         this.folder = value.folder
-        let video = this.findVideodetails(this.eUrl);
+        let video = this.findVideodetails(value.eUrl);
         this.otherStreams = this.findvideos(this.folder, this.eUrl)
         console.log(this.otherStreams);
         this.processing = false
@@ -179,6 +197,7 @@ export default({
  iframe{
     height: 210px;
     width: 100%;
+    background: #000;
  }
  .video-info {
     width: 100%;
@@ -188,7 +207,8 @@ export default({
     margin-bottom: 20px;
 }
 .iframe-wrapper{
-  background: var(--ion-color-secondary);
+  background: #000;
+  height: 210px;
 }
 .profile-info {
     display: flex;

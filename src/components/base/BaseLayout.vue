@@ -25,13 +25,16 @@
               >
                 <ion-text color="medium">
                   <h3 class="ion-no-margin text-s-s">
-                    ABC Church
+                    {{ profileName }}
                   </h3>
                 </ion-text>
-                <ion-thumbnail slot="end">
+                <ion-thumbnail
+                  v-if="ottPoster"
+                  slot="end"
+                >
                   <img
-                    src="@/assets/images/profile_image.png"
-                    alt="ABC Church"
+                    :src="ottPoster"
+                    :alt="profileName"
                   >
                 </ion-thumbnail>
               </ion-item>
@@ -42,6 +45,8 @@
             <slot
               name="content"
               :activeMenu="activeMenu"
+              :posterUrl="ottPoster"
+              :profileName="profileName"
             />
           </div>
           <!-- Footer Slide Start -->
@@ -108,32 +113,13 @@
           </ion-buttons>
         </ion-text>
       </div>
-      <!-- Loading Slide -->
-      <!-- <div
-        v-if="checkIsLoading"
-        slot="fixed"
-        class="initial-page"
-      >
-        <div class="castr-image">
-          <img
-            src="@/assets/images/demo_poster.png"
-            alt="ABC Church"
-          >
-        </div>
-        <div class="castr-spinner">
-          <ion-spinner
-            name="circles"
-            color="primary"
-          />
-        </div>
-      </div> -->
-      <!-- Loading Slide Ends -->
     </ion-content>
   </ion-page>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import userServices from '@/services/services';
 import {
   IonItem,
   IonContent,  
@@ -154,6 +140,7 @@ import {
 
 export default {
   components: {
+    userServices,
   IonContent,IonItem,
   IonPage,
   IonHeader,  
@@ -169,9 +156,12 @@ export default {
   IonThumbnail
   },
   props: [ "pageTitle", "showHeader", "showFooter", "showPadding" ],
+
   data() {
       return {
           activeMenu: 'live',
+          ottPoster: null,
+          profileName: null
       }
   },
   computed: {
@@ -191,7 +181,15 @@ export default {
     })
   },
   async mounted() {
-    console.log(this.connected);
+    // console.log(this.connected);
+    	try {
+       await userServices.getUserdata().then(result => {
+         this.profileName = result.name
+         this.ottPoster = 'https://assets.castr.io/ottAppPosters/'+result.ottAppPoster
+       });
+      } catch(err) {
+      console.log(err);
+      }
 	},
   methods: {
     beforeTabChange(e){

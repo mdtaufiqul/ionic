@@ -6,7 +6,7 @@
     <div class="card-left">
       <img
         src="@/assets/images/play.svg"
-        alt="ABC Church"
+        alt="Play"
       >
     </div>
     <ion-card-content class="ion-justify-content-start ion-align-items-start ">
@@ -19,7 +19,7 @@
       <ion-text class="ion-align-items-center">
         <img
           src="@/assets/images/folder.png"
-          alt="ABC Church"
+          alt="Folder"
           class="fw-500 text-s-xl "
         >
         {{ (voditem.foldername.length > 15) ? voditem.foldername.substring(0,15)+".." : voditem.foldername }}

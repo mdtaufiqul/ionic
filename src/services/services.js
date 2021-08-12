@@ -8,12 +8,30 @@ export default {
 	getStreamPreviewThumbUrl,
 	findMediapulse,
 	getStreamPlaylist,
-	getStreamVideolist
+	getStreamVideolist,
+	getUserdata,
+	getStreammetadata
 }
 
 async function getStreams() {
     let  streamLists =  await makeRequest('/streams/mystreams');
+
+	streamLists = await Promise.all(streamLists.map(async (single)=>{
+		return await getStreammetadata(single)
+	}))
+
+
+	
 	return streamLists
+}
+
+async function getStreammetadata(stream) {
+	let metaData = await makeRequest(`/streams/${stream._id}/metadata`);
+	if(metaData.ottEnabled){
+		return stream
+	}else{
+		return false
+	}
 }
 
 async function findMediapulse(stream) {
@@ -26,11 +44,20 @@ async function findMediapulse(stream) {
 	return stream
 }
 
+
+async function getUserdata() {
+    let  userData =  await makeRequest('/users/me');
+	return userData
+}
+
+
 async function getStreamPlaylist(streamID) {
 	let list = [];
 	list = await makeRequest(`/streams/${streamID}/schedular/playlist`);
 	return list
 }
+
+
 
 async function getStreamVideolist(stream) {
 	let list = [];

@@ -7,14 +7,17 @@
     <template #content="slotProps">
       <!-- Loading Slide -->
       <div
-        v-if="checkIsLoading"
+        v-show="checkIsLoading"
         slot="fixed"
         class="initial-page"
       >
-        <div class="castr-image">
+        <div
+          v-if="slotProps.posterUrl"
+          class="castr-image"
+        >
           <img
-            src="@/assets/images/demo_poster.png"
-            alt="ABC Church"
+            :src="slotProps.posterUrl"
+            :alt="slotProps.profileName"
           >
         </div>
         <div class="castr-spinner">
@@ -25,7 +28,7 @@
         </div>
       </div>
       <!-- Loading Slide Ends -->
-      <div v-else>
+      <div v-show="!checkIsLoading">
         <ion-searchbar
           v-if="!showFolder"
           ref="searchWidgetInputElement"
@@ -124,12 +127,28 @@
             class="ion-no-border ion-no-padding no-scrollbar"
           >
             <ion-grid class="ion-no-padding">
-              <ion-row>
+              <ion-row v-if="getVOD().length > 0">
                 <vod-single
                   v-for="stream in getVOD()"
                   :key="stream.id"
                   :voditem="stream"
                 />
+              </ion-row>
+              <ion-row v-else>
+                <ion-text class="no-stream">
+                  <img
+                    src="@/assets/images/no-stream.svg"
+                    alt="Back"
+                  >
+                  <h2 class="ion-no-margin color-text-2 text-xs-custom text-500">
+                    There is no {{ (slotProps.activeMenu == 'live') ? 'Stream' : 'VOD' }} here
+                  </h2>
+                  <p
+                    class="color-text-6 text-s-m"
+                  >
+                    Maybe come back later.
+                  </p>
+                </ion-text>
               </ion-row>
             </ion-grid>
           </ion-item>
@@ -141,7 +160,7 @@
           <ion-text class="ion-justify-content-start ion-align-items-center color-text-2 text-s-m text-capitalize folder-single pt-0">
             <img
               src="@/assets/images/grid.svg"
-              alt="ABC Church"
+              alt="All Files"
               class="fw-500 text-s-xl "
             ><span>All file</span>
           </ion-text>
@@ -152,7 +171,7 @@
           class="ion-no-border ion-no-padding no-scrollbar"
         >
           <ion-grid class="ion-no-padding">
-            <ion-row v-if="(activeTab == 'livestream' ? countedStream.live : countedStream.offline) > 0">
+            <ion-row v-if="((activeTab == 'livestream' ? countedStream.live : countedStream.offline) > 0) || showFolder">
               <single-stream
                 v-for="stream in filterStream(slotProps.activeMenu)"
                 :key="stream._id"
@@ -171,7 +190,7 @@
                   alt="Back"
                 >
                 <h2 class="ion-no-margin color-text-2 text-xs-custom text-500">
-                  There is no stream here
+                  There is no {{ (slotProps.activeMenu == 'live') ? 'Stream' : 'VOD' }} here
                 </h2>
                 <p
                   v-if="activeTab == 'livestream'"
@@ -179,7 +198,10 @@
                 >
                   Maybe the stream you’re looking for is not live yet. Visit <span @click="activeTab = 'offline'">Offline page</span> for a check.
                 </p>
-                <p class="color-text-6 text-s-m" v-else>
+                <p
+                  v-else
+                  class="color-text-6 text-s-m"
+                >
                   Maybe come back later.
                 </p>
               </ion-text>
@@ -405,6 +427,7 @@ ion-thumbnail{
   border-radius: 100%;
   margin: 0px;
   margin-left: 8px;
+  overflow: hidden;
 }
 ion-item{
   --min-height: unset;
@@ -574,6 +597,8 @@ ion-buttons.back-button {
 }
 .no-stream{
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 65px;
 }
 .no-stream img{
@@ -587,5 +612,8 @@ margin-top: 7px;
  color: var(--ion-color-text-1);
  text-decoration: underline;
  cursor: pointer;
+}
+.castr-image img{
+  width: 217px;
 }
 </style>
