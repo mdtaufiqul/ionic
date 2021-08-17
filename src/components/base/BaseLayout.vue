@@ -1,6 +1,9 @@
 <template>
   <ion-page>
-    <ion-content>
+    <ion-content @ionRefresh="doRefresh($event)">
+      <ion-refresher slot="fixed">
+        <ion-refresher-content />
+      </ion-refresher>
       <div
         v-if="connected"
         class="content-inner"
@@ -25,7 +28,7 @@
               >
                 <ion-text color="medium">
                   <h3 class="ion-no-margin text-s-s">
-                    {{ profileName }}
+                    {{ profileName }} {{ exitapp }}
                   </h3>
                 </ion-text>
                 <ion-thumbnail
@@ -123,7 +126,7 @@ import { mapGetters } from 'vuex'
 import userServices from '@/services/services';
 import { Plugins } from '@capacitor/core';
 const { App } = Plugins;
-
+import { chevronDownCircleOutline } from 'ionicons/icons'
 import {
   IonItem,
   IonContent,  
@@ -139,7 +142,8 @@ import {
   IonSpinner,
   IonText,
   IonThumbnail,
-  useIonRouter 
+  useIonRouter,
+  IonRefresher, IonRefresherContent 
 } from "@ionic/vue";
 
 
@@ -159,16 +163,28 @@ export default {
   IonTabs,
   IonSpinner,
   IonText,
-  IonThumbnail
+  IonThumbnail,
+  IonRefresher,
+  IonRefresherContent 
   },
   props: [ "pageTitle", "showHeader", "showFooter", "showPadding" ], 
+    setup() {
+    // const doRefresh = async (CustomEvent) => {
+    //   console.log('Begin async operation');
+    //     console.log('Async operation has ended');
+    //     await this.$store.dispatch('loadStreams')
+    //     CustomEvent.target.complete();
+    // }
+    // return { chevronDownCircleOutline, doRefresh }
+  },
   data() {
       return {
           activeMenu: 'live',
           ottPoster: null,
           profileName: null,
           exitapp: true,
-          connected: navigator.onLine
+          connected: navigator.onLine,
+          timer: 0
       }
   },
 	watch: {
@@ -182,30 +198,25 @@ export default {
                   console.log(e);
               } 
           }
-		}
+		},
 	},
   async mounted() {
-      setInterval(async () => {
+    clearInterval(this.timer)
+    this.timer = 0
+      this.timer = setInterval(async () => {
        Promise.resolve(await userServices.checkOnlineStatus()).then(async (result)=>{
           console.log('isOnline: '+result);
+          console.log('timer = '+ this.timer)
           this.connected = result
-          // if(result){
-          //    try {
-          //         await this.$store.dispatch('loadStreams')
-          //     } catch (e) {
-          //         console.log(e);
-          //     } 
-          // }
   })
-    }, 3000);
-
+    }, 4000);
+    
     this.setHistory()
     console.log('inmount'+this.setHistory());
     // console.log(this.connected);
       let currentPath = this.$route.matched[0].path
        const ionRouter = useIonRouter();
       //  console.log(currentPath);
-        
       document.addEventListener('ionBackButton', (ev) => {
         this.setHistory()
         ev.detail.register(10, () => {
@@ -224,8 +235,8 @@ export default {
               this.$router.replace({ path: '/stream/live' })
            }
 
-          if(currentPath == '/stream/vod'){
-              this.$router.replace({ path: '/stream/live' })
+          if(this.$route.fullPath == '/stream/vod'){
+                this.$router.replace({ path: '/stream/live' })
            }
           }
           
@@ -248,7 +259,16 @@ export default {
       }
 	},
   methods: {
+    async doRefresh(CustomEvent) {
+      console.log('Begin async operation');
+        console.log('Async operation has ended');
+        await this.$store.dispatch('loadStreams')
+        CustomEvent.target.complete();
+    },
     beforeTabChange(e){
+      this.setHistory()
+      clearInterval(this.timer)
+      this.timer = 0
       this.activeMenu = e.tab
     },
     setHistory(){
@@ -259,9 +279,15 @@ export default {
       if(currentRoute == 'VODBucketManage'){
         this.exitapp = false
       }
-      if(currentRoute == 'Stream'){
-        this.exitapp = true
+      if(this.$route){
+        if(this.$route.fullPath == '/stream/vod'){
+            this.exitapp = false
+        }
+        if(this.$route.fullPath == '/stream/live'){
+            this.exitapp = true
+        }
       }
+   
       return this.exitapp
     }
  
@@ -284,6 +310,7 @@ ion-toolbar {
 }
 ion-header{
     margin-top: 13px;
+    z-index: 9;
 }
 ion-title{
     line-height: 1;

@@ -4,7 +4,9 @@
     :show-footer="true"
     :show-padding="true"
   >
-    <template #content="slotProps">
+    <template
+      #content="slotProps"
+    >
       <!-- Loading Slide -->
       <div
         v-if="checkIsLoading"
@@ -282,17 +284,15 @@ watch: {
     if(this.$store.state.streamarray.allvideos){
        this.changeSortBy('newest');
     }
-  }
+  },
+      $route(to, from) {
+        if(from.fullPath == '/stream/live'){
+          this.searchFolder = ''
+        }
+    }
 },
   async mounted() {
-          document.addEventListener('ionBackButton', (ev) => {
-        let currentPath = this.$route.matched[0].path
-        ev.detail.register(9, () => {
-          if(currentPath == '/stream/vod'){
-              this.searchFolder = ''
-           }
-        });
-      });
+      
   },
     async created() {
     try {
@@ -303,6 +303,7 @@ watch: {
 },
   methods: {
     getVOD(){
+      console.log('sssssssssssssssddddddddd'+this.searchFolder)
       let vodlist = this.rawStreams
  	    const filteredVOD = vodlist.filter((s) => {
         let bool = s
@@ -376,8 +377,8 @@ watch: {
       this.activeTab = activetab
     },
      filterStream(cat, foldername = null) {
+       console.log('here')
         if (this.streamarray && typeof this.streamarray === 'object') {
-          console.log('here');
           console.log(this.streamarray.streams);
             const filteredStream = this.streamarray.streams.filter(single => {
                    let bool =  single.type == cat
@@ -593,7 +594,7 @@ ion-searchbar.searchbar-has-focus{
     margin-right: -20px;
     position: absolute;
     width: 100%;
-    z-index: 99;
+    z-index: 9;
     top: 0;
     display: flex;
     align-items: center;

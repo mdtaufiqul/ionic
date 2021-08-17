@@ -6,6 +6,20 @@
   >
     <template #content>
       <div
+        class="stream-navigation"
+      >
+        <ion-buttons
+          slot="start"
+          class="back-button"
+          @click="gotoStream"
+        >
+          <img
+            src="@/assets/images/left-arrow.svg"
+            alt="Back"
+          >Back
+        </ion-buttons>
+      </div>
+      <div
         v-show="!processing"
         class="iframe-wrapper"
       >
@@ -49,6 +63,9 @@ export default({
         this.iframecode = this.streamIframeCode()
     },
     methods: {
+      gotoStream(){
+        this.$router.replace({ path: '/stream/live' })
+      },
       streamIframeCode() {
 			const embedUrl = `https://player.castr.com/${this.streamId}`;
 			const htmlCode = `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allow="autoplay" allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>`;

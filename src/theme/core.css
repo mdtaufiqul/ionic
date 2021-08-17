@@ -114,3 +114,18 @@ iframe{
     object-fit: cover;
     object-position: left;
 }
+
+.stream-navigation {
+    background: var(--ion-color-primary);
+    padding: 12px 20px;
+    height: 40px;
+}
+
+.stream-navigation .back-button {
+    font-size: var(--font-s-s);
+    color: #fff;
+}
+
+.stream-navigation .back-button img {
+    margin-right: 10px;
+}

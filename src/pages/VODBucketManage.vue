@@ -8,6 +8,20 @@
       <ion-page>
         <ion-content class="ion-no-padding">
           <div
+            class="stream-navigation"
+          >
+            <ion-buttons
+              slot="start"
+              class="back-button"
+              @click="gotoStream"
+            >
+              <img
+                src="@/assets/images/left-arrow.svg"
+                alt="Back"
+              >
+            </ion-buttons>
+          </div>
+          <div
             v-show="!processing"
             class="vod-single-wrapper"
           >
@@ -152,6 +166,9 @@ export default({
    
     },
     methods: {
+        gotoStream(){
+        this.$router.replace({ path: '/stream/vod' })
+      },
       checkIframeloading(){
         let element = document.getElementById('embed');
         // let isLoaded = element.prop('data-isloaded');
