@@ -1,5 +1,5 @@
 {
-  "name": "castr-OTT",
+  "name": "Tam-Nguyen-OTT",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "resources": "capacitor-resources -p android,ios" 
   },
   "dependencies": {
     "@capacitor/android": "3.1.2",
@@ -20,6 +21,7 @@
     "@ionic/vue": "^5.4.0",
     "@ionic/vue-router": "^5.4.0",
     "axios": "^0.21.1",
+    "capacitor-resources": "^2.0.5",
     "core-js": "^3.6.5",
     "vue": "^3.0.0-0",
     "vue-router": "^4.0.0-0",

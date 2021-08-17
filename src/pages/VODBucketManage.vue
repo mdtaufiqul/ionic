@@ -38,7 +38,10 @@
                   {{ title }} 
                 </ion-text>
                 <div class="profile-info">
-                  <ion-thumbnail slot="end">
+                  <ion-thumbnail
+                    slot="end"
+                    class="image-small"
+                  >
                     <img
                       :src="slotProps.posterUrl"
                       :alt="slotProps.profileName"
@@ -135,7 +138,7 @@ export default({
 },
   async created() {
     try {
-        await this.$store.dispatch('loadStreams');
+        await this.$store.dispatch('loadStreams',false);
     } catch (e) {
         console.log(e);
     } 

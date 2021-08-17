@@ -7,7 +7,7 @@
     <template #content="slotProps">
       <!-- Loading Slide -->
       <div
-        v-show="checkIsLoading"
+        v-if="checkIsLoading"
         slot="fixed"
         class="initial-page"
       >
@@ -28,7 +28,7 @@
         </div>
       </div>
       <!-- Loading Slide Ends -->
-      <div v-show="!checkIsLoading">
+      <div else="!checkIsLoading">
         <ion-searchbar
           v-if="!showFolder"
           ref="searchWidgetInputElement"
@@ -128,6 +128,12 @@
           >
             <ion-grid class="ion-no-padding">
               <ion-row v-if="getVOD().length > 0">
+                <div
+                  v-if="searchFolder"
+                  class="query-folder-name"
+                >
+                  Folder: <span>{{ searchFolder }}</span>
+                </div>
                 <vod-single
                   v-for="stream in getVOD()"
                   :key="stream.id"
@@ -223,7 +229,6 @@ import {
 } from '@ionic/vue';
 import singleStream from '../components/stream/singleStream';
 import vodSingle from '@/components/stream/vodSingle.vue';
-import { BackButtonEvent } from '@ionic/core';
 import { Plugins } from '@capacitor/core';
 const { App } = Plugins;
 // import vodStream from '../components/stream/vodStream';
@@ -238,7 +243,7 @@ export default({
     // vodStream,
     IonItem, 
   IonThumbnail, IonLabel,
-  IonText ,IonSegment, IonSegmentButton, IonGrid, IonRow, vodSingle,IonBackButton, BackButtonEvent, Plugins, App },
+  IonText ,IonSegment, IonSegmentButton, IonGrid, IonRow, vodSingle,IonBackButton, Plugins, App },
   data () {
     return {
       activeTab: 'livestream',
@@ -280,6 +285,14 @@ watch: {
   }
 },
   async mounted() {
+          document.addEventListener('ionBackButton', (ev) => {
+        let currentPath = this.$route.matched[0].path
+        ev.detail.register(9, () => {
+          if(currentPath == '/stream/vod'){
+              this.searchFolder = ''
+           }
+        });
+      });
   },
     async created() {
     try {
@@ -617,5 +630,16 @@ margin-top: 7px;
 }
 .castr-image img{
   width: 217px;
+}
+.query-folder-name {
+    color: var(--ion-color-medium);
+    font-size: var(--font-s-xs);
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.query-folder-name>span {
+    color: #fff;
+    text-transform: capitalize;
 }
 </style>

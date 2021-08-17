@@ -19,9 +19,9 @@ import _ from 'lodash';
     setIsLoading({ commit }, isLoading) {
 		commit('IS_LOADING', isLoading);
 	},
-   async loadStreams({commit, dispatch}) {
+   async loadStreams({commit, dispatch}, loadingSpinner = true) {
     try {
-        dispatch('setIsLoading', true);
+      loadingSpinner && dispatch('setIsLoading', true);
         await userServices.getStreams().then(result => {
           
           let pulseAdded = result.map(async function(stream){
@@ -34,7 +34,7 @@ import _ from 'lodash';
           Promise.all(pulseAdded)
           .then(results => {
             commit('SAVE_STREAMS', {streams: result});
-            dispatch('setIsLoading', false);
+            loadingSpinner && dispatch('setIsLoading', false);
             console.log('user loaded');
             dispatch('loadVOD');
           })

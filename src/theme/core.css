@@ -109,3 +109,8 @@ iframe{
 .folder-single img {
     margin-right: 10px;
 }
+
+.image-small img{
+    object-fit: cover;
+    object-position: left;
+}

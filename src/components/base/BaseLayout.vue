@@ -31,6 +31,7 @@
                 <ion-thumbnail
                   v-if="ottPoster"
                   slot="end"
+                  class="image-small"
                 >
                   <img
                     :src="ottPoster"
@@ -222,6 +223,10 @@ export default {
           if(currentPath == '/livestreams/:streamId'){
               this.$router.replace({ path: '/stream/live' })
            }
+
+          if(currentPath == '/stream/vod'){
+              this.$router.replace({ path: '/stream/live' })
+           }
           }
           
         
@@ -231,7 +236,12 @@ export default {
     	try {
        await userServices.getUserdata().then(result => {
          this.profileName = result.name
-         this.ottPoster = 'https://assets.castr.io/ottAppPosters/'+result.ottAppPoster
+         if(result.ottAppPoster){
+          this.ottPoster = 'https://assets.castr.io/ottAppPosters/'+result.ottAppPoster
+         }else{
+           this.ottPoster = 'https://castr.io/wp-content/uploads/2020/04/Castr_main_logo_black.svg'
+         }
+         console.log(this.ottAppPoster);
        });
       } catch(err) {
       console.log(err);
