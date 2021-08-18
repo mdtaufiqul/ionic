@@ -72,7 +72,7 @@ export default({
 			return htmlCode;
 		},
     iframeLoaded(){
-      console.log('iframe loaded');
+      
     }
     }
 })

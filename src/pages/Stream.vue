@@ -270,7 +270,6 @@ export default({
   },
   computed: {
     streamarray() {
-      console.log("done1");
         return this.$store.state.streamarray;
     },
     checkIsLoading() {
@@ -279,7 +278,6 @@ export default({
   },
 watch: {
   streamarray(){
-    console.log("done2");
     this.countStream('live')
     if(this.$store.state.streamarray.allvideos){
        this.changeSortBy('newest');
@@ -303,7 +301,6 @@ watch: {
 },
   methods: {
     getVOD(){
-      console.log('sssssssssssssssddddddddd'+this.searchFolder)
       let vodlist = this.rawStreams
  	    const filteredVOD = vodlist.filter((s) => {
         let bool = s
@@ -373,13 +370,10 @@ watch: {
     },
     segmentChanged(ev) {
       let activetab = ev.detail.value;
-      console.log(activetab);
       this.activeTab = activetab
     },
      filterStream(cat, foldername = null) {
-       console.log('here')
         if (this.streamarray && typeof this.streamarray === 'object') {
-          console.log(this.streamarray.streams);
             const filteredStream = this.streamarray.streams.filter(single => {
                    let bool =  single.type == cat
                    if(bool && this.searchWidgetInput){
@@ -398,17 +392,12 @@ watch: {
         this.searchFolder = value
       },
       countStream(value){
-          // this.countedStream.live++ 
-          // this.countedStream.offline = (this.filterStream(value).length - this.countedStream.live)
-          // console.log(this.countedStream);
           let sreamList = this.filterStream(value)
           let countlive = sreamList.filter(function(single){
             return single.enabled && single.mediapulse.alive
           });
           this.countedStream.live = countlive.length
           this.countedStream.offline = (sreamList.length - countlive.length)
-          console.log('sreamList');
-          console.log(this.countedStream);
       },
       folderView() {
         this.searchFolder = ''

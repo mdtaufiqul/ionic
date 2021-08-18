@@ -169,13 +169,7 @@ export default {
   },
   props: [ "pageTitle", "showHeader", "showFooter", "showPadding" ], 
     setup() {
-    // const doRefresh = async (CustomEvent) => {
-    //   console.log('Begin async operation');
-    //     console.log('Async operation has ended');
-    //     await this.$store.dispatch('loadStreams')
-    //     CustomEvent.target.complete();
-    // }
-    // return { chevronDownCircleOutline, doRefresh }
+      
   },
   data() {
       return {
@@ -191,7 +185,6 @@ export default {
 		async connected () {
 			// overwrite url if load balancer enabled
 		   if(this.connected){
-         console.log('once once once');
              try {
                   await this.$store.dispatch('loadStreams')
               } catch (e) {
@@ -205,25 +198,19 @@ export default {
     this.timer = 0
       this.timer = setInterval(async () => {
        Promise.resolve(await userServices.checkOnlineStatus()).then(async (result)=>{
-          console.log('isOnline: '+result);
-          console.log('timer = '+ this.timer)
           this.connected = result
   })
     }, 4000);
     
     this.setHistory()
-    console.log('inmount'+this.setHistory());
-    // console.log(this.connected);
       let currentPath = this.$route.matched[0].path
        const ionRouter = useIonRouter();
-      //  console.log(currentPath);
       document.addEventListener('ionBackButton', (ev) => {
         this.setHistory()
         ev.detail.register(10, () => {
         
 
           if((this.exitapp)){
-            console.log('exit');
             App.exitApp();
             navigator['app'].exitApp();
           }else{
@@ -252,7 +239,6 @@ export default {
          }else{
            this.ottPoster = 'https://castr.io/wp-content/uploads/2020/04/Castr_main_logo_black.svg'
          }
-         console.log(this.ottAppPoster);
        });
       } catch(err) {
       console.log(err);
@@ -260,8 +246,6 @@ export default {
 	},
   methods: {
     async doRefresh(CustomEvent) {
-      console.log('Begin async operation');
-        console.log('Async operation has ended');
         await this.$store.dispatch('loadStreams')
         CustomEvent.target.complete();
     },

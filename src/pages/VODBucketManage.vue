@@ -145,7 +145,6 @@ export default({
         this.processing = true
         let video = this.findVideodetails(this.eUrl);
         this.otherStreams = this.findvideos(this.folder, this.eUrl)
-        console.log(this.otherStreams);
         this.processing = false
       }
     }
@@ -171,8 +170,6 @@ export default({
       },
       checkIframeloading(){
         let element = document.getElementById('embed');
-        // let isLoaded = element.prop('data-isloaded');
-        console.log(element);
       },
       refresh(value){
         this.processing = true
@@ -186,14 +183,12 @@ export default({
         this.folder = value.folder
         let video = this.findVideodetails(value.eUrl);
         this.otherStreams = this.findvideos(this.folder, this.eUrl)
-        console.log(this.otherStreams);
         this.processing = false
       },
       getVOD(){
         return this.otherStreams
       },
     findVideodetails(url) {
-             console.log(url)
         let video =  this.streamarray.allvideos.find(function(s) { return s.embedUrl == url })
         return video
 		},
