@@ -272,4 +272,8 @@ ion-spinner {
     align-items: center;
     justify-content: center;
 }
+.vod-single-wrapper {
+    overflow: scroll;
+    height: 100%;
+}
 </style>

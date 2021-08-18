@@ -28,7 +28,7 @@
               >
                 <ion-text color="medium">
                   <h3 class="ion-no-margin text-s-s">
-                    {{ profileName }} {{ exitapp }}
+                    {{ profileName }}
                   </h3>
                 </ion-text>
                 <ion-thumbnail

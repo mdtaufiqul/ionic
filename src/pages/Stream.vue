@@ -533,9 +533,10 @@ ion-item::part(native) {
   overflow: hidden;
   padding: 0px;
 }
-/* .searchbar-search-icon{
-    top: 8px !important;
-  } */
+.searchbar-search-icon{
+        top: 50% !important;
+    transform: translateY(-50%);
+  }
 ion-grid.folder{
   position: relative;
   z-index: 9;
