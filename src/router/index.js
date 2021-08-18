@@ -32,7 +32,7 @@ const routes = [
 		name: 'LivestreamManage',
 		component: livestreamManage
 	},
-  {
+	{
 		path: '/vodstreams/:streamId/:sname/:fname',
 		name: 'VODBucketManage',
 		component: VODBucketManage

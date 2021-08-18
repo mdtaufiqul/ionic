@@ -18,7 +18,7 @@
               <img
                 src="@/assets/images/left-arrow.svg"
                 alt="Back"
-              >
+              >Back
             </ion-buttons>
           </div>
           <div
@@ -162,7 +162,6 @@ export default({
       this.eUrl = url
       this.title = this.$route && this.$route.params.sname
       this.folder = this.$route && this.$route.params.fname
-   
     },
     methods: {
         gotoStream(){
