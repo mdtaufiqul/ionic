@@ -4,29 +4,29 @@
     :show-footer="false"
     :show-padding="false"
   >
-    <template #content>
+    <template #content="slotProps">
       <div
-        class="stream-navigation"
-      >
-        <ion-buttons
-          slot="start"
-          class="back-button"
-          @click="gotoStream"
-        >
-          <img
-            src="@/assets/images/left-arrow.svg"
-            alt="Back"
-          >Back
-        </ion-buttons>
-      </div>
-      <div
-        v-show="!processing"
+        v-if="!processing && !slotProps.isRefreshing"
         class="iframe-wrapper"
       >
+        <div
+          class="stream-navigation"
+        >
+          <ion-buttons
+            slot="start"
+            class="back-button"
+            @click="gotoStream"
+          >
+            <img
+              src="@/assets/images/left-arrow.svg"
+              alt="Back"
+            >Back
+          </ion-buttons>
+        </div>
         <div v-html="iframecode" />
       </div>
       <div
-        v-show="processing"
+        v-else
         class="loader"
       >
         <ion-spinner name="crescent" />
@@ -65,6 +65,7 @@ export default({
     methods: {
       gotoStream(){
         this.$router.replace({ path: '/stream/live' })
+        return
       },
       streamIframeCode() {
 			const embedUrl = `https://player.castr.com/${this.streamId}`;

@@ -8,23 +8,23 @@
       <ion-page>
         <ion-content class="ion-no-padding">
           <div
-            class="stream-navigation"
-          >
-            <ion-buttons
-              slot="start"
-              class="back-button"
-              @click="gotoStream"
-            >
-              <img
-                src="@/assets/images/left-arrow.svg"
-                alt="Back"
-              >Back
-            </ion-buttons>
-          </div>
-          <div
-            v-show="!processing"
+            v-if="!processing && !slotProps.isRefreshing"
             class="vod-single-wrapper"
           >
+            <div
+              class="stream-navigation"
+            >
+              <ion-buttons
+                slot="start"
+                class="back-button"
+                @click="gotoStream"
+              >
+                <img
+                  src="@/assets/images/left-arrow.svg"
+                  alt="Back"
+                >Back
+              </ion-buttons>
+            </div>
             <div class="iframe-wrapper">
               <iframe
                 v-show="!iframeProcessing"
@@ -104,7 +104,7 @@
             </div>
           </div>
           <div
-            v-show="processing"
+            v-else
             class="loader"
           >
             <ion-spinner name="crescent" />
@@ -144,6 +144,17 @@ export default({
       if(this.$store.state.streamarray.allvideos){
         this.processing = true
         let video = this.findVideodetails(this.eUrl);
+        if(!video){
+          this.gotoStream()
+          this.processing = false
+          return
+        }
+        if(this.title != video.fileName){
+          this.title = video.fileName
+        }
+        if(this.folder != video.foldername){
+          this.folder = video.foldername
+        }
         this.otherStreams = this.findvideos(this.folder, this.eUrl)
         this.processing = false
       }
@@ -165,7 +176,9 @@ export default({
     },
     methods: {
         gotoStream(){
+          this.processing = false
         this.$router.replace({ path: '/stream/vod' })
+        return
       },
       checkIframeloading(){
         let element = document.getElementById('embed');

@@ -51,6 +51,7 @@
               :activeMenu="activeMenu"
               :posterUrl="ottPoster"
               :profileName="profileName"
+              :isRefreshing="isRefreshing"
             />
           </div>
           <!-- Footer Slide Start -->
@@ -180,6 +181,11 @@ export default {
           connected: navigator.onLine,
           timer: 0
       }
+  },
+   computed: {
+    isRefreshing() {
+        return this.$store.state.isRefreshing;
+    }
   },
 	watch: {
 		async connected () {

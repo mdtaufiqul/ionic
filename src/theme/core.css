@@ -91,7 +91,7 @@
     z-index: 1;
 }
 iframe{
-    height: 100vh;
+    height: calc(100vh - 45px);
  width: 100%;
 }
 .folder-single {
