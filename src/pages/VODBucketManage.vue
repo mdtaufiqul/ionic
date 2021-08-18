@@ -116,13 +116,13 @@
 </template>
 
 <script>
-import {  IonPage, IonContent, IonItem, IonText, IonThumbnail,IonGrid, IonRow, IonSpinner } from '@ionic/vue';
+import {  IonPage, IonContent, IonItem, IonText, IonThumbnail,IonGrid, IonRow, IonSpinner, IonButtons } from '@ionic/vue';
 import vodSingle from '@/components/stream/vodSingle.vue';
 
 export default({
       components: {
         IonContent,
-        IonPage, IonItem, IonText, IonThumbnail, IonGrid, IonRow, vodSingle, IonSpinner 
+        IonPage, IonItem, IonText, IonThumbnail, IonGrid, IonRow, vodSingle, IonSpinner , IonButtons
         },
     data() {
         return {

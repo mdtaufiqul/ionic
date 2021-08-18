@@ -4,11 +4,15 @@ import _ from 'lodash';
   const state= {
     streamarray: [],
     isLoading: false,
+    isRefreshing: false
   };
 
   const mutations= {
-    IS_LOADING(state, isLoading) {
+  IS_LOADING(state, isLoading) {
 		state.isLoading = isLoading;
+	},
+  IS_REFRESHING(state, isRefreshing) {
+		state.isRefreshing = isRefreshing;
 	},
   SAVE_STREAMS(state, streams) {
     state.streamarray = streams;
@@ -19,9 +23,13 @@ import _ from 'lodash';
     setIsLoading({ commit }, isLoading) {
 		commit('IS_LOADING', isLoading);
 	},
+    setIsRefreshing({ commit }, isRefreshing) {
+		commit('IS_REFRESHING', isRefreshing);
+	},
    async loadStreams({commit, dispatch}, loadingSpinner = true) {
     try {
       loadingSpinner && dispatch('setIsLoading', true);
+      dispatch('setIsRefreshing', true)
         await userServices.getStreams().then(result => {
           
           let pulseAdded = result.map(async function(stream){
@@ -71,6 +79,7 @@ import _ from 'lodash';
               allvideos: _.flatten(videos)
             });
             console.log('vod loaded');
+            dispatch('setIsRefreshing', false)
           })
           .catch(error => {
             if (!error.response) {

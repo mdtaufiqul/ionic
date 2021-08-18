@@ -246,8 +246,9 @@ export default {
 	},
   methods: {
     async doRefresh(CustomEvent) {
-        await this.$store.dispatch('loadStreams')
+        await this.$store.dispatch('loadStreams', false)
         CustomEvent.target.complete();
+        console.log('refreshing')
     },
     beforeTabChange(e){
       this.setHistory()
