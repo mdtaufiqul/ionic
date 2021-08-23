@@ -30,7 +30,7 @@
         </div>
       </div>
       <!-- Loading Slide Ends -->
-      <div else="!checkIsLoading">
+      <div v-show="!checkIsLoading">
         <ion-searchbar
           v-if="!showFolder"
           ref="searchWidgetInputElement"
