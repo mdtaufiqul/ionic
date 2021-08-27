@@ -12,7 +12,7 @@
           :class=" showPadding ? 'base-padding' : 'ion-no-padding' "
           @ionTabsWillChange="beforeTabChange"
         >
-          <ion-header v-if="showHeader">
+          <ion-header v-if="showHeader && !checkIsLoading">
             <ion-toolbar>
               <ion-buttons
                 slot="start"
@@ -56,7 +56,7 @@
           </div>
           <!-- Footer Slide Start -->
           <ion-tab-bar
-            v-if="showFooter"
+            v-if="showFooter && !checkIsLoading"
             slot="bottom"
           >
             <ion-tab-button
@@ -185,6 +185,9 @@ export default {
    computed: {
     isRefreshing() {
         return this.$store.state.isRefreshing;
+    },
+      checkIsLoading() {
+        return this.$store.state.isLoading;
     }
   },
 	watch: {

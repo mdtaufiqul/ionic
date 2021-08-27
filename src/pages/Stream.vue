@@ -418,7 +418,7 @@ watch: {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 99;
+    z-index: 9999;
 }
 .castr-spinner{
     position: fixed;

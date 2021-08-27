@@ -178,7 +178,8 @@ function createVideoInstance(videoSrc) {
 	const vid = document.createElement('video');
 	vid.src = videoSrc;
 	vid.muted = true;
-	vid.className = 'stream-preview';
+	vid.playsinline = true;
+	vid.setAttribute('playsinline', true);
 	return vid;
 }
 
