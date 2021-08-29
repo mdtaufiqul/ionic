@@ -6,7 +6,7 @@ import _ from 'lodash';
     isLoading: false,
     isRefreshing: false
   };
-
+// =========Mutation==========
   const mutations= {
   IS_LOADING(state, isLoading) {
 		state.isLoading = isLoading;
@@ -18,7 +18,7 @@ import _ from 'lodash';
     state.streamarray = streams;
   }
   };
-
+// =========Action==========
   const actions= {
     setIsLoading({ commit }, isLoading) {
 		commit('IS_LOADING', isLoading);
@@ -26,41 +26,36 @@ import _ from 'lodash';
     setIsRefreshing({ commit }, isRefreshing) {
 		commit('IS_REFRESHING', isRefreshing);
 	},
-   async loadStreams({commit, dispatch}, loadingSpinner = true) {
+  async loadStreams({commit, dispatch}, loadingSpinner = true) {
     try {
       loadingSpinner && dispatch('setIsLoading', true);
       dispatch('setIsRefreshing', true)
-        await userServices.getStreams().then(result => {
-          
-          let pulseAdded = result.map(async function(stream){
-            
-              if(stream && stream.type == 'live' && stream.enabled){
-                await userServices.findMediapulse(stream)
-              }
-            
-          })
-          Promise.all(pulseAdded)
-          .then(results => {
-            commit('SAVE_STREAMS', {streams: result});
-            loadingSpinner && dispatch('setIsLoading', false);
-            console.log('user loaded');
-            dispatch('loadVOD');
-          })
-          .catch(e => {
-            console.error(e);
-          })
-
-
-        }); 
+      await userServices.getStreams().then(result => {
+        let pulseAdded = result.map(async function(stream){
+          if(stream && stream.type == 'live' && stream.enabled){
+            await userServices.findMediapulse(stream)
+          }
+        })
+        Promise.all(pulseAdded)
+        .then(results => {
+          commit('SAVE_STREAMS', {streams: result});
+          loadingSpinner && dispatch('setIsLoading', false);
+          console.log('user loaded');
+          dispatch('loadVOD');
+        })
+        .catch(e => {
+          console.error(e);
+        })
+      }); 
     }
     catch(error){
       if (!error.response) {
         checkInternet()
-    } else {
-      console.log(error.response.data.message)
+      } else {
+        console.log(error.response.data.message)
+      }
     }
-    }
-      },
+  },
    async loadVOD({commit, dispatch}) {
     try {
           let videos = [];
@@ -101,16 +96,13 @@ import _ from 'lodash';
     }
       }
     }
-
-
-
 async function checkInternet(){
   Promise.resolve(await userServices.checkOnlineStatus()).then((result)=>{
   console.log('isOnline: '+result);
     return result
   })
 }
-
+// =========Export==========
 export default new Vuex.Store({
   namespaced: true,
   state,

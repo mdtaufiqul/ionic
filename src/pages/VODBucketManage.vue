@@ -11,6 +11,7 @@
             v-if="!processing && !slotProps.isRefreshing"
             class="vod-single-wrapper"
           >
+            <!-- ==Back Button== -->
             <div
               class="stream-navigation"
             >
@@ -25,6 +26,7 @@
                 >Back
               </ion-buttons>
             </div>
+            <!-- ==Iframe== -->
             <div class="iframe-wrapper">
               <iframe
                 v-show="!iframeProcessing"
@@ -43,6 +45,7 @@
                 data-isloaded="0"
               />
             </div>
+            <!-- ==VOD details== -->
             <ion-item class="ion-no-border">
               <div class="video-info">
                 <ion-text
@@ -87,6 +90,7 @@
               v-if="!processing"
               class="vod-content"
             >
+              <!-- ==Other VODs in folder== -->
               <ion-item
                 class="ion-no-border ion-no-padding no-scrollbar related-list"
               >
@@ -120,10 +124,7 @@ import {  IonPage, IonContent, IonItem, IonText, IonThumbnail,IonGrid, IonRow, I
 import vodSingle from '@/components/stream/vodSingle.vue';
 
 export default({
-      components: {
-        IonContent,
-        IonPage, IonItem, IonText, IonThumbnail, IonGrid, IonRow, vodSingle, IonSpinner , IonButtons
-        },
+    components: { IonContent, IonPage, IonItem, IonText, IonThumbnail, IonGrid, IonRow, vodSingle, IonSpinner , IonButtons },
     data() {
         return {
             eUrl: null,

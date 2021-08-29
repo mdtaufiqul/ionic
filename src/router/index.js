@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import Dashboard from '@/pages/Dashboard.vue';
-// import VOD from '@/pages/VOD.vue';
 import Stream from '@/pages/Stream.vue';
 import livestreamManage from '@/pages/livestreamManage.vue';
 import VODBucketManage from '@/pages/VODBucketManage.vue';
@@ -12,11 +10,6 @@ const routes = [
     name: 'Home',
     redirect: '/stream/live'
   },
-  {
-		path: '/dashboard',
-		name: 'Dashboard',
-		component: Dashboard
-	},
   {
 		path: '/stream/:type',
 		name: 'Stream',

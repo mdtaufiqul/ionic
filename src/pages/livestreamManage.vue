@@ -9,6 +9,7 @@
         v-if="!processing && !slotProps.isRefreshing"
         class="iframe-wrapper"
       >
+        <!-- ==Back Button== -->
         <div
           class="stream-navigation"
         >
@@ -36,16 +37,10 @@
 </template>
 
 <script>
-import {  IonPage, IonContent, IonItem,IonSpinner} from '@ionic/vue';
+import {  IonPage, IonContent, IonItem,IonSpinner, IonButtons} from '@ionic/vue';
 
 export default({
-      components: {
-        IonContent,
-        IonPage, IonItem,IonSpinner
-        },
-    setup() {
-       
-    },
+    components: { IonButtons,IonContent,IonPage,IonItem,IonSpinner },
     data() {
         return {
             streamId: null,

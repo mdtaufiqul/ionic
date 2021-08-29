@@ -188,7 +188,7 @@ async function makeRequest(reqConfig) {
 			path: reqConfig
 		}
 	}
-    reqConfig.url = reqConfig.path+'?apiKey=castrkey_470c2d30-defb-11eb-90fa-f582e5f1edf5'
+    reqConfig.url = reqConfig.path+`?apiKey=${process.env.VUE_APP_OTT_API}`
     let res
     try {
         res = await api.request(reqConfig)

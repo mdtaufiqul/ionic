@@ -124,6 +124,7 @@ iframe{
 .stream-navigation .back-button {
     font-size: var(--font-s-s);
     color: #fff;
+    cursor: pointer;
 }
 
 .stream-navigation .back-button img {

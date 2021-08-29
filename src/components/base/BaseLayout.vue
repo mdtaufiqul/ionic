@@ -1,6 +1,7 @@
 <template>
   <ion-page>
     <ion-content @ionRefresh="doRefresh($event)">
+      <!-- ==Refresh icon== -->
       <ion-refresher slot="fixed">
         <ion-refresher-content />
       </ion-refresher>
@@ -12,6 +13,7 @@
           :class=" showPadding ? 'base-padding' : 'ion-no-padding' "
           @ionTabsWillChange="beforeTabChange"
         >
+          <!-- ==Header== -->
           <ion-header v-if="showHeader && !checkIsLoading">
             <ion-toolbar>
               <ion-buttons
@@ -54,7 +56,7 @@
               :isRefreshing="isRefreshing"
             />
           </div>
-          <!-- Footer Slide Start -->
+          <!-- ==Footer== -->
           <ion-tab-bar
             v-if="showFooter && !checkIsLoading"
             slot="bottom"
@@ -90,9 +92,9 @@
               </ion-label>
             </ion-tab-button>
           </ion-tab-bar>
-          <!-- Footer Slide Ends -->
         </ion-tabs>
       </div>
+      <!-- ==No internet slide== -->
       <div
         v-else
         class="no-internet"
@@ -123,11 +125,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import userServices from '@/services/services';
 import { Plugins } from '@capacitor/core';
 const { App } = Plugins;
-import { chevronDownCircleOutline } from 'ionicons/icons'
 import {
   IonItem,
   IonContent,  
@@ -144,7 +144,8 @@ import {
   IonText,
   IonThumbnail,
   useIonRouter,
-  IonRefresher, IonRefresherContent 
+  IonRefresher, 
+  IonRefresherContent 
 } from "@ionic/vue";
 
 
@@ -152,23 +153,28 @@ export default {
   components: {
     userServices,
     useIonRouter ,
-  IonContent,IonItem,
-  IonPage,
-  IonHeader,  
-  IonButtons,
-  IonToolbar,
-  IonTitle,
-  IonLabel, 
-  IonTabBar, 
-  IonTabButton, 
-  IonTabs,
-  IonSpinner,
-  IonText,
-  IonThumbnail,
-  IonRefresher,
-  IonRefresherContent 
+    IonContent,
+    IonItem,
+    IonPage,
+    IonHeader,  
+    IonButtons,
+    IonToolbar,
+    IonTitle,
+    IonLabel, 
+    IonTabBar, 
+    IonTabButton, 
+    IonTabs,
+    IonSpinner,
+    IonText,
+    IonThumbnail,
+    IonRefresher,
+    IonRefresherContent 
   },
-  props: [ "pageTitle", "showHeader", "showFooter", "showPadding" ], 
+  props: {
+    showHeader: Boolean,
+    showFooter: Boolean,
+    showPadding: Boolean
+  }, 
     setup() {
       
   },

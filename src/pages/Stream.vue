@@ -29,8 +29,9 @@
           />
         </div>
       </div>
-      <!-- Loading Slide Ends -->
+      <!-- ============Main Content================ -->
       <div v-show="!checkIsLoading">
+        <!-- ==SearchBar== -->
         <ion-searchbar
           v-if="!showFolder"
           ref="searchWidgetInputElement"
@@ -41,6 +42,7 @@
           @ionFocus="onSearchWidgetFocus"
           @ionBlur="onSearchWidgetBlur"
         />
+        <!-- ==Back Button== -->
         <div
           v-else
           class="navigation"
@@ -57,28 +59,7 @@
           </ion-buttons>
           <ion-text>Folder</ion-text>
         </div>
-        <ion-segment
-          v-show="slotProps.activeMenu == 'live'"
-          :value="activeTab"
-          @ionChange="segmentChanged($event)"
-        >
-          <ion-segment-button
-            value="livestream"
-            class="ion-no-margin"
-          >
-            <ion-label class="color-text-1 fw-500 text-s-s text-capitalize">
-              Livestream
-            </ion-label>
-          </ion-segment-button>
-          <ion-segment-button
-            value="offline"
-            class="ion-no-margin"
-          >
-            <ion-label class="color-text-1 fw-500 text-s-s text-capitalize">
-              Offline
-            </ion-label>
-          </ion-segment-button>
-        </ion-segment>
+        <!-- ==VOD Options== -->
         <div v-show="(slotProps.activeMenu == 'vod') && !showFolder">
           <ion-item
             class="vod-nav"
@@ -105,7 +86,7 @@
                 Z to A
               </ion-select-option>
             </ion-select>
-        
+            <!-- ==Folder Button== -->
             <ion-grid class="ion-no-padding folder">
               <ion-row
                 class="folder-menu ion-justify-content-center ion-align-items-center ion-no-margin"
@@ -124,7 +105,7 @@
               </ion-row>
             </ion-grid>
           </ion-item>
-   
+          <!-- ==Folder Lists== -->
           <ion-item
             class="ion-no-border ion-no-padding no-scrollbar"
           >
@@ -161,6 +142,7 @@
             </ion-grid>
           </ion-item>
         </div>
+        <!-- ==Back to all files== -->
         <ion-item
           v-if="showFolder"
           @click="showFolder=!showFolder"
@@ -173,7 +155,30 @@
             ><span>All file</span>
           </ion-text>
         </ion-item>
-
+        <!-- ==Livestream & Offline Tab== -->
+        <ion-segment
+          v-show="slotProps.activeMenu == 'live'"
+          :value="activeTab"
+          @ionChange="segmentChanged($event)"
+        >
+          <ion-segment-button
+            value="livestream"
+            class="ion-no-margin"
+          >
+            <ion-label class="color-text-1 fw-500 text-s-s text-capitalize">
+              Livestream
+            </ion-label>
+          </ion-segment-button>
+          <ion-segment-button
+            value="offline"
+            class="ion-no-margin"
+          >
+            <ion-label class="color-text-1 fw-500 text-s-s text-capitalize">
+              Offline
+            </ion-label>
+          </ion-segment-button>
+        </ion-segment>
+        <!-- ==Stream Lists== -->
         <ion-item
           v-show="(slotProps.activeMenu == 'live') || ((slotProps.activeMenu == 'vod') && showFolder)"
           class="ion-no-border ion-no-padding no-scrollbar"
@@ -224,28 +229,47 @@
 <script>
 import {  
   IonItem, 
-  IonThumbnail, IonLabel,
-  IonText,IonSegment, IonSegmentButton, IonGrid, IonRow, IonSelect,
+  IonThumbnail,
+  IonLabel,
+  IonText,
+  IonSegment,
+  IonSegmentButton,
+  IonGrid,
+  IonRow,
+  IonSelect,
   IonSelectOption, 
-  IonSearchbar,IonButtons,IonBackButton, IonSpinner
+  IonSearchbar,
+  IonButtons,
+  IonBackButton,
+  IonSpinner
 } from '@ionic/vue';
-import singleStream from '../components/stream/singleStream';
+import singleStream from '../components/stream/streamSingle';
 import vodSingle from '@/components/stream/vodSingle.vue';
 import { Plugins } from '@capacitor/core';
 const { App } = Plugins;
-// import vodStream from '../components/stream/vodStream';
-// import userServices from '@/services/services';
 import _ from 'lodash';
 
 export default({ 
   components: {  
-    singleStream,IonSelect,IonButtons,
-  IonSearchbar,
-  IonSelectOption,IonSpinner,
-    // vodStream,
+    singleStream,
+    IonSelect,
+    IonButtons,
+    IonSearchbar,
+    IonSelectOption,
+    IonSpinner,
     IonItem, 
-  IonThumbnail, IonLabel,
-  IonText ,IonSegment, IonSegmentButton, IonGrid, IonRow, vodSingle,IonBackButton, Plugins, App },
+    IonThumbnail,
+    IonLabel,
+    IonText,
+    IonSegment,
+    IonSegmentButton,
+    IonGrid,
+    IonRow,
+    vodSingle,
+    IonBackButton,
+    Plugins,
+    App 
+  },
   data () {
     return {
       activeTab: 'livestream',
